@@ -15,7 +15,7 @@
              <children>
                <VBox spacing="10.0" HBox.hgrow="NEVER">
                  <children>
-                   <DatePicker fx:id="InsTestDate" prefHeight="25.0" prefWidth="100.0" showWeekNumbers="true" />
+                   <DatePicker fx:id="InsTestDateDatePicker" prefHeight="25.0" prefWidth="100.0" showWeekNumbers="true" />
                    <Button prefHeight="25.0" prefWidth="100.0" text="All" />
                    <Button prefHeight="25.0" prefWidth="100.0" text="Errors Only" />
                    <Spinner fx:id="StrSP" prefHeight="25.0" prefWidth="100.0">

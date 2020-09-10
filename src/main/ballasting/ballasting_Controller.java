@@ -43,70 +43,70 @@ public class ballasting_Controller {
             System.out.println((ToggleButton)  toggleGroup.getSelectedToggle());
         });
 
-        List<Ballasting> last_seq_data = new ArrayList<Ballasting>();
-        //list of last 10 seq
-        List<Integer>seq = getLastSeq();
-        //list of streamers
-        List<Integer>str = getStrList();
-        //list of compasses
-        List<Integer>compass = getCompassList();
-
-        for(Integer s : seq) {
-            List<Ballasting> data = getDataList(s);
-            last_seq_data.addAll(data);
-        }
-
-        for (int st : str) {
-            for (int u : compass) {
-                double s1 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(0))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s2 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(1))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s3 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(2))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s4 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(3))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s5 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(4))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s6 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(5))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s7 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(6))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s8 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(7))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s9 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(8))
-                        .collect(Collectors.toList()).get(0).getMean();
-                double s10 = last_seq_data
-                        .stream()
-                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(9))
-                        .collect(Collectors.toList()).get(0).getMean();
-
-                tenSeq.add(new SeqData(st, u, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10));
-            }
-        }
-
-        Runnable getRes = () -> {
-            fillTable();
-        };
-        new Thread(getRes).start();
+//        List<Ballasting> last_seq_data = new ArrayList<Ballasting>();
+//        //list of last 10 seq
+//        List<Integer>seq = getLastSeq();
+//        //list of streamers
+//        List<Integer>str = getStrList();
+//        //list of compasses
+//        List<Integer>compass = getCompassList();
+//
+//        for(Integer s : seq) {
+//            List<Ballasting> data = getDataList(s);
+//            last_seq_data.addAll(data);
+//        }
+//
+//        for (int st : str) {
+//            for (int u : compass) {
+//                double s1 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(0))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s2 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(1))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s3 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(2))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s4 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(3))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s5 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(4))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s6 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(5))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s7 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(6))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s8 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(7))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s9 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(8))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//                double s10 = last_seq_data
+//                        .stream()
+//                        .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(9))
+//                        .collect(Collectors.toList()).get(0).getMean();
+//
+//                tenSeq.add(new SeqData(st, u, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10));
+//            }
+//        }
+//
+//        Runnable getRes = () -> {
+//            fillTable();
+//        };
+//        new Thread(getRes).start();
     }
 
     public void fillTable(){

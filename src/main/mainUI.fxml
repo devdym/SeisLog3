@@ -53,7 +53,7 @@
     </MenuBar>
     <SplitPane dividerPositions="0.06513026052104208, 0.7965931863727455" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane>
+        <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0">
           <children>
             <VBox layoutX="-6.0" layoutY="-47.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <children>
@@ -77,7 +77,7 @@
               <children>
                 <TabPane fx:id="tabPane" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <tabs>
-                    <Tab text="Ins Test">
+                    <Tab fx:id="InsTestPane" text="Ins Test">
                       <fx:include fx:id="insTest" source="insTest/InsTest.fxml" />
                       <graphic>
                         <ImageView>
@@ -85,7 +85,7 @@
                         </ImageView>
                       </graphic>
                     </Tab>
-                    <Tab text="Battery">
+                    <Tab fx:id="BatteryPane" text="Battery">
                       <fx:include fx:id="battery" source="battery/batteryUI.fxml" />
                       <graphic>
                         <ImageView>
@@ -93,7 +93,7 @@
                         </ImageView>
                       </graphic>
                     </Tab>
-                    <Tab text="Ballasting">
+                    <Tab fx:id="BallastingPane" text="Ballasting">
                       <fx:include fx:id="ballasting" source="ballasting/ballastingUI.fxml" />
                       <graphic>
                         <ImageView>
@@ -221,9 +221,9 @@
             </AnchorPane>
           </content>
         </ScrollPane>
-        <AnchorPane>
+        <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
           <children>
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <children>
                 <Canvas fx:id="spread" height="536.0" width="200.0" VBox.vgrow="ALWAYS">
                   <cursor>

@@ -59,12 +59,12 @@
                                       <TreeItemPropertyValueFactory property="unitName" />
                                   </cellValueFactory>
                               </TreeTableColumn>
-                            <TreeTableColumn prefWidth="75.0" text="Bank A">
+                            <TreeTableColumn fx:id="bankAColumn" prefWidth="75.0" text="Bank A">
                                 <cellValueFactory>
                                     <TreeItemPropertyValueFactory property="bankA" />
                                 </cellValueFactory>
                             </TreeTableColumn>
-                              <TreeTableColumn prefWidth="75.0" text="Bank B">
+                              <TreeTableColumn fx:id="bankBColumn" prefWidth="75.0" text="Bank B">
                                   <cellValueFactory>
                                       <TreeItemPropertyValueFactory property="bankB" />
                                   </cellValueFactory>
@@ -83,12 +83,12 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <LineChart prefHeight="179.0" prefWidth="495.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <LineChart fx:id="SpreadLC" prefHeight="179.0" prefWidth="495.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis side="BOTTOM" fx:id="xAxisDate" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis fx:id="yAxisIns" side="LEFT" />
                     </yAxis>
                   </LineChart>
                </children>

@@ -1,7 +1,6 @@
 package main.insTest;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -9,9 +8,12 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import main.Controller;
 import main.HibernateUtil;
 import main.entities.InsTestLimits;
 import main.entities.InsTestRes;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -25,7 +27,9 @@ import static javafx.collections.FXCollections.observableArrayList;
 
 public class insTest_Controller {
 
-    @FXML public DatePicker InsTestDate;
+    static final Logger logger = LogManager.getLogger(Controller.class.getName());
+
+    @FXML public DatePicker InsTestDateDatePicker;
     @FXML public TextArea calcInfoArea;
     @FXML public Spinner dS2;
     @FXML public Spinner dS3;
@@ -58,24 +62,11 @@ public class insTest_Controller {
     List<InsTestLimits> CalculatedLimits = new ArrayList<>();
 
     public void initialize() {
-        //TODO data colorcode
-
         InsTable.setRoot(root);
-
+        //TODO data colorcode
         //TODO Select last date
 
-        //read preferences
-        Runnable readPreferences = () -> {
-            System.out.println("read ins test dates");
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            org.hibernate.Transaction transaction = session.beginTransaction();
 
-            List<LocalDate> tt = session.createQuery("SELECT DISTINCT updated FROM InsTestRes", LocalDate.class).getResultList();
-            InsTestDates.addAll(tt);
-            transaction.commit();
-        };
-        new Thread(readPreferences).start();
 
         //InsDatePicker
         final Callback<DatePicker, DateCell> InsDateFactory = new Callback<>() {
@@ -96,14 +87,16 @@ public class insTest_Controller {
                 };
             }
         };
-        InsTestDate.setDayCellFactory(InsDateFactory);
+        InsTestDateDatePicker.setDayCellFactory(InsDateFactory);
 
-        InsTestDate.setOnAction(event -> {
+        InsTestDateDatePicker.setOnAction(event -> {
+
+//            InsTestDates.addAll(Controller.InsTestDates);
             //clear table
             root.getChildren().clear();
 
             //populate tree table
-            LocalDate date = InsTestDate.getValue();
+            LocalDate date = InsTestDateDatePicker.getValue();
             Runnable getRes = () -> {
                 SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
                 Session session = sessionFactory.getCurrentSession();
@@ -127,6 +120,7 @@ public class insTest_Controller {
                     }
                 });
                 str = 0;
+
             };
             new Thread(getRes).start();
         });
@@ -141,6 +135,15 @@ public class insTest_Controller {
         dS4.valueProperty().addListener((observable) -> limitsFunc());
         dS5.valueProperty().addListener((observable) -> limitsFunc());
         dS6.valueProperty().addListener((observable) -> limitsFunc());
+
+        //read preferences
+//        Runnable readPreferences = () -> {
+//            logger.warn("assign ins test dates");
+//            InsTestDates.addAll(Controller.InsTestDates);
+//        };
+//        new Thread(readPreferences).start();
+
+
     }
 
     private void limitsFunc() {
@@ -223,7 +226,7 @@ public class insTest_Controller {
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
 
-            LocalDate date = InsTestDate.getValue();
+            LocalDate date = InsTestDateDatePicker.getValue();
 
             SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             Session session = sessionFactory.getCurrentSession();
@@ -253,7 +256,7 @@ public class insTest_Controller {
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
 
-            LocalDate date = InsTestDate.getValue();
+            LocalDate date = InsTestDateDatePicker.getValue();
 
             SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             Session session = sessionFactory.getCurrentSession();
@@ -282,7 +285,7 @@ public class insTest_Controller {
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
 
-            LocalDate date = InsTestDate.getValue();
+            LocalDate date = InsTestDateDatePicker.getValue();
 
             SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             Session session = sessionFactory.getCurrentSession();
@@ -310,7 +313,7 @@ public class insTest_Controller {
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
 
-            LocalDate date = InsTestDate.getValue();
+            LocalDate date = InsTestDateDatePicker.getValue();
 
             SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             Session session = sessionFactory.getCurrentSession();

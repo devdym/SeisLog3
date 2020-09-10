@@ -1,9 +1,15 @@
 package main.general;
 
+import main.Controller;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.util.Properties;
 
 public class PropertiesWorker {
+
+    static final Logger logger = LogManager.getLogger(Controller.class.getName());
 
     private static Properties prop = new Properties();
     public static String MySQLDB_IP;
@@ -25,7 +31,7 @@ public class PropertiesWorker {
     }
 
     public static void ReadPreferences(){
-        System.out.println("ReadPrefe");
+        logger.warn("Read Prefe");
         try (InputStream input = new FileInputStream("config.properties")){
             prop.load(input);
             MySQLDB_IP = prop.getProperty("db_ip");

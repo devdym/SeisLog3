@@ -1,9 +1,11 @@
 package main;
 
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -17,7 +19,10 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-//TODO init git
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 //TODO add dags to project
 //TODO add SiesLogAPI
 //TODO Dashboard tab with stats
@@ -36,9 +41,9 @@ public class Controller {
     }
 
     @FXML private TabPane tabPane;
-    @FXML private insTest_Controller insTest_Tab_Controller;
-    @FXML private battery_Controller battery_Tab_Controller;
-    @FXML private ballasting_Controller ballasting_Tab_Controller;
+    @FXML private Tab InsTestPane;
+    @FXML private Tab BatteryPane;
+    @FXML private Tab BallastingPane;
 
     @FXML private TextField IPAddress;
     @FXML private TextField UserName;
@@ -55,7 +60,11 @@ public class Controller {
     @FXML private Button removeProject;
     @FXML private Canvas spread;
 
+    public static List<LocalDate> InsTestDates = new ArrayList<>();
+
     @FXML public void initialize(){
+        logger.warn("Entering application.");
+
         Runnable readPref = () -> {
             PropertiesWorker.ReadPreferences();
             IPAddress.setText(PropertiesWorker.MySQLDB_IP);
@@ -64,13 +73,48 @@ public class Controller {
         };
         new Thread(readPref).start();
 
-        //TODO check with tab is open and load a date or data
 
-        logger.trace("Entering application.");
+        //TODO check with tab is open and load a date or data
+        tabPane.getSelectionModel().select(0);
+        tabPane.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) -> {
+            if(newValue == InsTestPane) {
+                InsTestDates = getInsTestDates();
+
+                logger.warn("instest selected");
+            } else if(newValue == BatteryPane) {
+                logger.warn("battery tab selected");
+                //  Import_Tab_Controller.handleImport();
+            } else if(newValue == BallastingPane) {
+                logger.warn("ballasting tab selected");
+                //  Import_Tab_Controller.handleImport();
+            }
+            else {
+                logger.warn("other tab");
+            }
+        });
+
+
 
         GraphicsContext gc = spread.getGraphicsContext2D();
         drawStreamers(gc);
 //        drawCoordinates(gc);
+    }
+    private List<LocalDate> getInsTestDates(){
+        logger.warn("reading InsTest dates from DB");
+        List<LocalDate> res = new ArrayList<>();
+        //read InsTest Dates
+        Runnable readPreferences = () -> {
+            logger.warn("query ins test dates");
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+            org.hibernate.Transaction transaction = session.beginTransaction();
+
+            List<LocalDate> tt = session.createQuery("SELECT DISTINCT updated FROM InsTestRes", LocalDate.class).getResultList();
+            res.addAll(tt);
+            transaction.commit();
+        };
+        new Thread(readPreferences).start();
+        return res;
     }
 
     private void drawStreamers(GraphicsContext gc) {
