@@ -89,11 +89,16 @@
     -fx-text-fill: #3c3f41;
 }
 
-.table-view .filler{
+.table-view .filler {
     -fx-background-color: transparent;
 }
 
-
+.aSeries.chart-series-line {
+    -fx-stroke: red;
+}
+.bSeries.chart-series-line {
+    -fx-stroke: red;
+}
 
 
 .default-color0.chart-series-line { -fx-stroke: #8F528D; }

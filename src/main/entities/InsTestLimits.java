@@ -1,6 +1,7 @@
 package main.entities;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "insTestLimits")
@@ -32,6 +33,9 @@ public class InsTestLimits {
     @Column(name = "sensor_nb")
     private int sensor_nb;
 
+    @Column(name = "updated")
+    private LocalDate updated;
+
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Projects projects;
@@ -39,7 +43,7 @@ public class InsTestLimits {
     public InsTestLimits() {
     }
 
-    public InsTestLimits(double noise, double cap_min, double cap_max, double leakage, double cutoff_min, double cutoff_max, int sensor_nb, Projects projects) {
+    public InsTestLimits(double noise, double cap_min, double cap_max, double leakage, double cutoff_min, double cutoff_max, int sensor_nb, LocalDate updated, Projects projects) {
         this.noise = noise;
         this.cap_min = cap_min;
         this.cap_max = cap_max;
@@ -47,6 +51,7 @@ public class InsTestLimits {
         this.cutoff_min = cutoff_min;
         this.cutoff_max = cutoff_max;
         this.sensor_nb = sensor_nb;
+        this.updated = updated;
         this.projects = projects;
     }
 
@@ -122,17 +127,25 @@ public class InsTestLimits {
         this.projects = projects;
     }
 
+    public LocalDate getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDate updated) {
+        this.updated = updated;
+    }
+
     @Override
     public String toString() {
         return "InsTestLimits{" +
-                "id=" + id +
-                ", noise=" + noise +
+                "noise=" + noise +
                 ", cap_min=" + cap_min +
                 ", cap_max=" + cap_max +
                 ", leakage=" + leakage +
                 ", cutoff_min=" + cutoff_min +
                 ", cutoff_max=" + cutoff_max +
                 ", sensor_nb=" + sensor_nb +
+                ", updated=" + updated +
                 ", projects=" + projects +
                 '}';
     }

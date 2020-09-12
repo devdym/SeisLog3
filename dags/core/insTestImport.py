@@ -1,4 +1,4 @@
-from seislogAPI.seal408 import read_instest2
+from seislogAPI.seal408 import read_instest2, read_instestlimits2
 from seislogAPI.folderscaner import scan_folder, logFiles_toMySql
 import os, shutil
 import logging
@@ -56,10 +56,15 @@ def read_data(**kwargs):
             logger.info('importLog id {}'.format(importlog_id))
         else:
             logger.info('importLog file dosn`t exist')
-            # import file into ballasting table
+            # import file into insTestRes table
             b = read_instest2(log_path)
             instest_toMySql(b, projectid)
-            logger.info('IMPORTED')
+            logger.info('IMPORTED RES')
+            # import file into insTestLimits table
+            lim_date = b['updated'][0]
+            lim = read_instestlimits2(log_path, lim_date)
+            instestlimits_toMySql(lim, projectid)
+            logger.info('IMPORTED LIMITS')
             # add into importLog
             save_log_toMySql(log_path, projectid)
             logger.info('LOG is UPDATED')
@@ -102,3 +107,12 @@ def instest_toMySql(data, id):
 								   pw="usersql",
 								   db="aurora_light"))
     data.to_sql('insTestRes', con=engine, if_exists='append', chunksize=1000, index=False)
+
+def instestlimits_toMySql(data, id):
+    data['project_id'] = id
+    # create sqlalchemy engine
+    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
+						   .format(user="usersql",
+								   pw="usersql",
+								   db="aurora_light"))
+    data.to_sql('insTestLimits', con=engine, if_exists='append', chunksize=1000, index=False)

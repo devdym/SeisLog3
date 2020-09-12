@@ -142,3 +142,79 @@ def read_instest2(file):
 	df['failure'] = ''
 
 	return df
+
+def read_instestlimits2(file, date):
+	'''
+	reads the csv file exported by Seal 408 with Instrument tests data
+	'''
+
+	with open(file, 'r', encoding='cp1252') as file1:
+		line = file1.readline()
+		cnt = 0
+		read = True
+		res = []
+		while line:
+			if 'ALL SENSORS' in line or not read:
+				read = False
+				if not read:
+					tmp = line.strip().split(' ')
+					while('' in tmp) :
+						tmp.remove('')
+						if "Noise" in tmp:
+						    tmp.pop(0)
+						if "Capacitance" in tmp:
+						    tmp.pop(0)
+						if "Leakage" in tmp:
+						    tmp.pop(0)
+						if "Cut" in tmp:
+						    tmp.pop(0)
+						if "Off" in tmp:
+						    tmp.pop(0)
+
+					res.append(tmp)
+				if 'ALL SENSORS    Nb' in line:
+					read = True
+			line = file1.readline()
+
+	res.pop(0)
+	res.pop(0)
+	res.pop(0)
+	res.pop(0)
+	res.pop(-1)
+	res.pop(-1)
+
+	dfl = pd.DataFrame(res)
+	dfl[0] = dfl[0].str[1:2]
+	dfl = dfl.drop(2, 1)
+	dfl = dfl.drop(4, 1)
+
+	sensorNb = int(round(len(dfl)/4))
+	start = 0
+	end = start + sensorNb
+
+	noiseRes = dfl[start:end].copy()
+	noiseRes = noiseRes.drop(3, 1)
+	noiseRes.rename(columns={0: 'sensor_nb', 1: 'noise'}, inplace=True)
+	start = start + sensorNb
+	end = start + sensorNb
+
+	capRes = dfl[start:end].copy()
+	capRes.rename(columns={0: 'sensor_nb', 1: 'cap_min', 3: 'cap_max'}, inplace=True)
+	start = start + sensorNb
+	end = start + sensorNb
+
+	leakageRes = dfl[start:end].copy()
+	leakageRes = leakageRes.drop(3, 1)
+	leakageRes.rename(columns={0: 'sensor_nb', 1: 'leakage'}, inplace=True)
+	start = start + sensorNb
+	end = start + sensorNb
+
+	cutoffRes = dfl[start:end].copy()
+	cutoffRes.rename(columns={0: 'sensor_nb', 1: 'cutoff_min', 3: 'cutoff_max'}, inplace=True)
+
+	total = pd.merge(noiseRes, capRes, on=["sensor_nb"])
+	total = pd.merge(total, cutoffRes, on=["sensor_nb"])
+	total = pd.merge(total, leakageRes, on=["sensor_nb"])
+	total['updated'] = date
+
+	return total

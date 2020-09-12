@@ -1,17 +1,17 @@
 package main.battery;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.*;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import main.HibernateUtil;
 import main.entities.Batteries;
-import main.entities.InsTestRes;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -23,7 +23,6 @@ import java.util.List;
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class battery_Controller {
-    //TODO data colorcode
     @FXML public ToggleButton errorsButton;
     @FXML public DatePicker BatteriesDate;
     @FXML public Spinner minBankA;
@@ -33,37 +32,42 @@ public class battery_Controller {
     @FXML public TreeTableColumn<Batteries, Number> bankBColumn;
     @FXML public LineChart SpreadLC;
     @FXML public CategoryAxis xAxisDate;
-    @FXML public NumberAxis yAxisIns;
+    @FXML public NumberAxis yAxisVolts;
 
-    private TreeItem<Batteries> rootB = new TreeItem<>();
-    private List<LocalDate> BattDates = new ArrayList<>();
+    private final TreeItem<Batteries> rootB = new TreeItem<>();
+    private final List<LocalDate> BattDates = new ArrayList<>();
     private int str = 0;
 
     public void initialize() {
         BattTable.setRoot(rootB);
 
-        //TODO Select last date
-
+        errorsButton.setSelected(true);
         // Value factory.
         SpinnerValueFactory<Double> valueAFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(4.2, 6.2, 3, 0.1);
         minBankA.setValueFactory(valueAFactory);
+
         // Value factory.
         SpinnerValueFactory<Double> valueBFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(4.2, 6.2, 3, 0.1);
         minBankB.setValueFactory(valueBFactory);
 
-        //read preferences
+        //query dates from DB for DatePicker
         Runnable readBatteriesDates = () -> {
             SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             Session session = sessionFactory.getCurrentSession();
             org.hibernate.Transaction transaction = session.beginTransaction();
 
-            List<LocalDate> batteryDate = session.createQuery("SELECT DISTINCT date_ FROM Batteries", LocalDate.class).getResultList();
+            List<LocalDate> batteryDate =
+                    session.createQuery("SELECT DISTINCT date_ FROM Batteries order by date_ desc", LocalDate.class)
+                            .getResultList();
             BattDates.addAll(batteryDate);
             transaction.commit();
+
+            System.out.println(BattDates.get(0));
+            BatteriesDate.setValue(BattDates.get(0));
         };
         new Thread(readBatteriesDates).start();
 
-        //BattDatePicker
+        //Batt Date Picker factory
         final Callback<DatePicker, DateCell> BatteriesDateFactory = new Callback<>() {
             @Override
             public DateCell call(DatePicker param) {
@@ -84,76 +88,16 @@ public class battery_Controller {
         };
         BatteriesDate.setDayCellFactory(BatteriesDateFactory);
 
-        minBankB.valueProperty().addListener(event -> {
-            LocalDate date = BatteriesDate.getValue();
-            Runnable getRes = () -> {
-                List<Batteries> bt;
-                if (errorsButton.isSelected()) {
-                    System.out.println("selected");
-                    bt = getAllBatt(date);
-                    fillTable(bt);
-                }else {
-                    System.out.println("NOT selected");
-                    bt = getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
-                    fillTable(bt);
-                }
-            };
-            new Thread(getRes).start();
-        });
-        minBankA.valueProperty().addListener(event -> {
-            LocalDate date = BatteriesDate.getValue();
-            Runnable getRes = () -> {
-                List<Batteries> bt;
-                if (errorsButton.isSelected()) {
-                    System.out.println("selected");
-                    bt = getAllBatt(date);
-                    fillTable(bt);
-                }else {
-                    System.out.println("NOT selected");
-                    bt = getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
-                    fillTable(bt);
-                }
-            };
-            new Thread(getRes).start();
-        });
+        minBankB.valueProperty().addListener(event -> update());
+        minBankA.valueProperty().addListener(event -> update());
+        errorsButton.setOnAction(event -> update());
+        BatteriesDate.setOnAction(event -> update());
 
-        errorsButton.setOnAction(event -> {
-            LocalDate date = BatteriesDate.getValue();
-            Runnable getRes = () -> {
-                List<Batteries> bt;
-                if (errorsButton.isSelected()) {
-                    System.out.println("selected");
-                    bt = getAllBatt(date);
-                    fillTable(bt);
-                }else {
-                    System.out.println("NOT selected");
-                    bt = getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
-                    fillTable(bt);
-                }
-            };
-            new Thread(getRes).start();
-        });
-
-        BatteriesDate.setOnAction(event -> {
-            LocalDate date = BatteriesDate.getValue();
-            Runnable getRes = () -> {
-                List<Batteries> bt;
-                if (errorsButton.isSelected()) {
-                    System.out.println("selected");
-                    bt = getAllBatt(date);
-                    fillTable(bt);
-                }else {
-                    System.out.println("NOT selected");
-                    bt = getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
-                    fillTable(bt);
-                }
-            };
-            new Thread(getRes).start();
-        });
-
+        // table select listener
         BattTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener<TreeItem<Batteries>>)
-                (observable, oldValue, newValue) -> ShowBattGraph(newValue.getValue()));
+                (observable, oldValue, newValue) -> drawBattGraph(newValue.getValue()));
 
+        // color code for bankA column
         bankAColumn.setCellFactory((TreeTableColumn<Batteries, Number> param) -> {
             TreeTableCell cell = new TreeTableCell<Batteries, Number>(){
                 @Override
@@ -178,7 +122,7 @@ public class battery_Controller {
             };
             return cell;
         });
-
+        // color code for bankB column
         bankBColumn.setCellFactory((TreeTableColumn<Batteries, Number> param) -> {
             TreeTableCell cell = new TreeTableCell<Batteries, Number>(){
                 @Override
@@ -205,7 +149,100 @@ public class battery_Controller {
         });
     }
 
-    public void ShowBattGraph(Batteries unit) {
+    private void update(){
+        LocalDate date = BatteriesDate.getValue();
+        Runnable getRes = () -> {
+            List<Batteries> bt;
+            if (errorsButton.isSelected()) {
+                System.out.println("selected");
+                minBankA.setDisable(true);
+                minBankB.setDisable(true);
+                bt = getAllBatt(date);
+                fillTable(bt);
+            }else {
+                System.out.println("NOT selected");
+                bt = getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
+                fillTable(bt);
+                minBankA.setDisable(false);
+                minBankB.setDisable(false);
+            }
+        };
+        new Thread(getRes).start();
+    }
+
+    private static List<Batteries> getAllBatt(LocalDate date){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        Query<Batteries> query =
+                session.createQuery("FROM Batteries where date_ like :dateupd",
+                        Batteries.class);
+        query.setParameter("dateupd", date);
+        List<Batteries> bt = query.getResultList();
+        transaction.commit();
+        return bt;
+    }
+
+    private static List<Batteries> getErrBatt(LocalDate date, Double min_a_v, Double min_b_v){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        Query<Batteries> query =
+                session.createQuery("FROM Batteries where date_ like :dateupd and bankA < :minA or bankB < :minB",
+                        Batteries.class);
+        query.setParameter("dateupd", date);
+        query.setParameter("minA", min_a_v);
+        query.setParameter("minB", min_b_v);
+        List<Batteries> bt = query.getResultList();
+        transaction.commit();
+        return bt;
+    }
+
+    private void fillTable(List<Batteries> bt){
+        //clear table
+        rootB.getChildren().clear();
+
+        bt.stream().forEach((Result)-> {
+            if(Result.getStreamerNumber() != str){
+                TreeItem<Batteries> strN =
+                        new TreeItem<>(new Batteries(
+                                str+1,
+                                "C",
+                                0,
+                                0.0,
+                                0.0,
+                                "a"));
+                strN.setExpanded(true);
+                strN.getChildren().add(
+                        new TreeItem<>(
+                            new Batteries(
+                                    Result.getStreamerNumber(),
+                                    Result.getUnit(),
+                                    Result.getUnitNumber(),
+                                    Result.getBankA(),
+                                    Result.getBankB(),
+                                    Result.getActiveBank())));
+                str++;
+                rootB.getChildren().add(strN);
+            } else {
+                TreeItem t = rootB.getChildren().get(str-1);
+                t.getChildren().add(
+                        new TreeItem<>(
+                                new Batteries(
+                                        Result.getStreamerNumber(),
+                                        Result.getUnit(),
+                                        Result.getUnitNumber(),
+                                        Result.getBankA(),
+                                        Result.getBankB(),
+                                        Result.getActiveBank())));
+            }
+        });
+        str = 0;
+    }
+
+    public void drawBattGraph(Batteries unit) {
         System.out.println("ShowBattGraph selected");
 
         Platform.runLater(() -> {
@@ -221,14 +258,14 @@ public class battery_Controller {
             List<Batteries> sp = query.getResultList();
             transaction.commit();
 
-            ObservableList<XYChart.Series<Integer, Integer>> series = observableArrayList();
+            ObservableList<XYChart.Series<String, Double>> series = observableArrayList();
             series.retainAll();
             XYChart.Series aSeries = new XYChart.Series();
             XYChart.Series bSeries = new XYChart.Series();
 
-            for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data(sp.get(i).getDate_().toString(), sp.get(i).getBankA()));
-                bSeries.getData().add(new XYChart.Data(sp.get(i).getDate_().toString(), sp.get(i).getBankB()));
+            for (Batteries batteries : sp) {
+                aSeries.getData().add(new XYChart.Data(batteries.getDate_().toString(), batteries.getBankA()));
+                bSeries.getData().add(new XYChart.Data(batteries.getDate_().toString(), batteries.getBankB()));
             }
             aSeries.setName("Bank A");
             bSeries.setName("Bank B");
@@ -236,52 +273,9 @@ public class battery_Controller {
 
             SpreadLC.getData().retainAll();
             SpreadLC.getData().addAll(series);
+            aSeries.getNode().setStyle("-fx-stroke: green;");
+            bSeries.getNode().setStyle("-fx-stroke: orange;");
         });
-    }
-
-    private static List<Batteries> getAllBatt(LocalDate date){
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        Query<Batteries> query = session.createQuery("FROM Batteries where date_ like :dateupd", Batteries.class);
-        query.setParameter("dateupd", date);
-        List<Batteries> bt = query.getResultList();
-        transaction.commit();
-        return bt;
-    }
-
-    private static List<Batteries> getErrBatt(LocalDate date, Double min_a_v, Double min_b_v){
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        Query<Batteries> query = session.createQuery("FROM Batteries where date_ like :dateupd and bankA < :minA or bankB < :minB", Batteries.class);
-        query.setParameter("dateupd", date);
-        query.setParameter("minA", min_a_v);
-        query.setParameter("minB", min_b_v);
-        List<Batteries> bt = query.getResultList();
-        transaction.commit();
-        return bt;
-    }
-
-    private void fillTable(List<Batteries> bt){
-        str = 0;
-        //clear table
-        rootB.getChildren().clear();
-
-        bt.stream().forEach((Result)-> {
-            if(Result.getStreamerNumber() != str){
-                TreeItem<Batteries> strN = new TreeItem<>(new Batteries(str+1, "C", 0, 0.0, 0.0, "a"));
-                strN.getChildren().add(new TreeItem<>(new Batteries(Result.getStreamerNumber(), Result.getUnit(), Result.getUnitNumber(), Result.getBankA(), Result.getBankB(), Result.getActiveBank())));
-                str++;
-                rootB.getChildren().add(strN);
-            } else {
-                TreeItem t = rootB.getChildren().get(str-1);
-                t.getChildren().add(new TreeItem<>(new Batteries(Result.getStreamerNumber(), Result.getUnit(), Result.getUnitNumber(), Result.getBankA(), Result.getBankB(), Result.getActiveBank())));
-            }
-        });
-        str = 0;
     }
 
 }

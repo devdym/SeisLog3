@@ -1,8 +1,11 @@
 package main.insTest;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -12,6 +15,7 @@ import main.Controller;
 import main.HibernateUtil;
 import main.entities.InsTestLimits;
 import main.entities.InsTestRes;
+import main.general.ReadData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -46,14 +50,19 @@ public class insTest_Controller {
     @FXML public TextField capTolTF;
     @FXML public TextField cutTolTF;
     @FXML public LineChart SpreadLC;
-    @FXML public NumberAxis xAxisIns;
+    @FXML public CategoryAxis xAxisIns;
     @FXML public NumberAxis yAxisIns;
     @FXML public Spinner StrSP;
     @FXML public TreeTableView InsTable;
+    @FXML public TreeTableColumn<InsTestRes, Number> CapColumn;
+    @FXML public TreeTableColumn<InsTestRes, Number> CutoffColumn;
+    @FXML public TreeTableColumn<InsTestRes, Number> NoiseColumn;
+    @FXML public TreeTableColumn<InsTestRes, Number> LeakageColumn;
     @FXML public ToggleButton CapButton;
     @FXML public ToggleButton CutButton;
     @FXML public ToggleButton LeakageButton;
     @FXML public ToggleButton NoiseButton;
+    @FXML public ToggleButton errorsButton;
 
     private TreeItem<InsTestRes> root = new TreeItem<>();
     private List<LocalDate> InsTestDates = new ArrayList<>();
@@ -63,12 +72,41 @@ public class insTest_Controller {
 
     public void initialize() {
         InsTable.setRoot(root);
-        //TODO data colorcode
         //TODO Select last date
 
+        InsTestDates = Controller.getInsTestDates();
+        errorsButton.setSelected(true);
+        // table select listener
+        InsTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener<TreeItem<InsTestRes>>)
+                (observable, oldValue, newValue) -> drawChGraph(newValue.getValue()));
 
+        // table color code
+        CapColumn.setCellFactory((TreeTableColumn<InsTestRes, Number> param) -> {
+            TreeTableCell cell = new TreeTableCell<InsTestRes, Number>(){
+                @Override
+                //by using Number we don't have to parse a String
+                protected void updateItem(Number item, boolean empty) {
+                    super.updateItem(item, empty);
+                    TreeTableRow<InsTestRes> cttr = getTreeTableRow();
+                    if (item == null || empty){
+                        setText(null);
+                        cttr.setStyle("");
+                        setStyle("");
+                    } else {
+//                        ttr.setStyle(item.doubleValue() > 4.2
+//                                ? "-fx-background-color:lightgreen"
+//                                : "-fx-background-color:pink");
+                        setText(item.toString());
+                        setStyle(item.doubleValue() > 219.0
+                                ? ""
+                                : "-fx-background-color:red");
+                    }
+                }
+            };
+            return cell;
+        });
 
-        //InsDatePicker
+        //InsDate Picker
         final Callback<DatePicker, DateCell> InsDateFactory = new Callback<>() {
             @Override
             public DateCell call(DatePicker param) {
@@ -87,43 +125,12 @@ public class insTest_Controller {
                 };
             }
         };
+        // Date Picker color code
         InsTestDateDatePicker.setDayCellFactory(InsDateFactory);
+        // Date Picker on Action
+        InsTestDateDatePicker.setOnAction(event -> update());
 
-        InsTestDateDatePicker.setOnAction(event -> {
-
-//            InsTestDates.addAll(Controller.InsTestDates);
-            //clear table
-            root.getChildren().clear();
-
-            //populate tree table
-            LocalDate date = InsTestDateDatePicker.getValue();
-            Runnable getRes = () -> {
-                SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-                Session session = sessionFactory.getCurrentSession();
-                Transaction transaction = session.beginTransaction();
-
-                Query<InsTestRes> query = session.createQuery("FROM InsTestRes where updated like :dateupd", InsTestRes.class);
-                query.setParameter("dateupd", date);
-                List<InsTestRes> tt = query.getResultList();
-                transaction.commit();
-
-                str = 0;
-                tt.stream().forEach((Result)-> {
-                    if(Result.getStreamer() != str){
-                        TreeItem<InsTestRes> strN = new TreeItem<>(new InsTestRes(str+1,0,0,0,0,0,0,0));
-                        strN.getChildren().add(new TreeItem<>(new InsTestRes(Result.getStreamer(), Result.getTrace(), Result.getAss_sn(), Result.getType(), Result.getCap(), Result.getCutoff(), Result.getNoise(), Result.getLeakage())));
-                        str++;
-                        root.getChildren().add(strN);
-                    } else {
-                        TreeItem t = root.getChildren().get(str-1);
-                        t.getChildren().add(new TreeItem<>(new InsTestRes(Result.getStreamer(), Result.getTrace(), Result.getAss_sn(), Result.getType(), Result.getCap(), Result.getCutoff(), Result.getNoise(), Result.getLeakage())));
-                    }
-                });
-                str = 0;
-
-            };
-            new Thread(getRes).start();
-        });
+        errorsButton.setOnAction(event -> update());
 
         tS2.valueProperty().addListener((observable) -> limitsFunc());
         tS3.valueProperty().addListener((observable) -> limitsFunc());
@@ -135,15 +142,30 @@ public class insTest_Controller {
         dS4.valueProperty().addListener((observable) -> limitsFunc());
         dS5.valueProperty().addListener((observable) -> limitsFunc());
         dS6.valueProperty().addListener((observable) -> limitsFunc());
+    }
 
-        //read preferences
-//        Runnable readPreferences = () -> {
-//            logger.warn("assign ins test dates");
-//            InsTestDates.addAll(Controller.InsTestDates);
-//        };
-//        new Thread(readPreferences).start();
+    private void update(){
+        //clear table
+        root.getChildren().clear();
 
+        //populate tree table
+        LocalDate date = InsTestDateDatePicker.getValue();
+        Runnable getRes = () -> {
 
+            List<InsTestLimits> lim = ReadData.getInsTestLimits(date);
+            List<InsTestRes> res;
+            logger.warn(lim.toString());
+
+            if(errorsButton.isSelected()){
+                logger.warn("get all InsTest result");
+                res = ReadData.getInsTestResErrOnly(date, lim);
+            } else {
+                logger.warn("get errors InsTest result");
+                res = ReadData.getInsTestRes(date);
+            }
+            fillTable(res);
+        };
+        new Thread(getRes).start();
     }
 
     private void limitsFunc() {
@@ -335,5 +357,103 @@ public class insTest_Controller {
             SpreadLC.getData().retainAll();
             SpreadLC.getData().add(aSeries);
         });
+    }
+
+    public void drawChGraph(InsTestRes section) {
+        System.out.println("ShowIntGraph selected");
+
+        Platform.runLater(() -> {
+            int selected = section.getType();
+            System.out.println("selected unit " + selected);
+
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.getCurrentSession();
+            Transaction transaction = session.beginTransaction();
+
+            Query<InsTestRes> query = session.createQuery("FROM InsTestRes where ass_sn = :s order by updated", InsTestRes.class);
+            query.setParameter("s", selected);
+            List<InsTestRes> sp = query.getResultList();
+            transaction.commit();
+
+            ObservableList<XYChart.Series<String, Double>> series = observableArrayList();
+            series.retainAll();
+            XYChart.Series Series1 = new XYChart.Series();
+            XYChart.Series Series2 = new XYChart.Series();
+            XYChart.Series Series3 = new XYChart.Series();
+            XYChart.Series Series4 = new XYChart.Series();
+            XYChart.Series Series5 = new XYChart.Series();
+            XYChart.Series Series6 = new XYChart.Series();
+            XYChart.Series Series7 = new XYChart.Series();
+            XYChart.Series Series8 = new XYChart.Series();
+            XYChart.Series Series9 = new XYChart.Series();
+            XYChart.Series Series10 = new XYChart.Series();
+            XYChart.Series Series11 = new XYChart.Series();
+            XYChart.Series Series12 = new XYChart.Series();
+
+            for (InsTestRes instestres : sp) {
+                if(instestres.getTrace() == 1){
+                    Series1.getData().add(new XYChart.Data(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == 2){
+                    Series2.getData().add(new XYChart.Data(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+            }
+            Series1.setName("trace 1");
+            Series2.setName("trace 2");
+            series.addAll(Series1, Series2);
+
+            SpreadLC.getData().retainAll();
+            SpreadLC.getData().addAll(series);
+//            aSeries.getNode().setStyle("-fx-stroke: green;");
+//            bSeries.getNode().setStyle("-fx-stroke: orange;");
+        });
+    }
+
+    public void fillTable(List<InsTestRes> res){
+        str = 0;
+        res.stream().forEach((Result)-> {
+            if(Result.getStreamer() != str){
+                TreeItem<InsTestRes> strN =
+                        new TreeItem<>(
+                                new InsTestRes(
+                                        str+1,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0));
+//                        strN.setExpanded(true);
+                strN.getChildren().add(
+                        new TreeItem<>(
+                                new InsTestRes(
+                                        Result.getStreamer(),
+                                        Result.getTrace(),
+                                        Result.getAss_sn(),
+                                        Result.getType(),
+                                        Result.getCap(),
+                                        Result.getCutoff(),
+                                        Result.getNoise(),
+                                        Result.getLeakage())));
+                str++;
+                root.getChildren().add(strN);
+            } else {
+                TreeItem t = root.getChildren().get(str-1);
+                t.getChildren().add(
+                        new TreeItem<>(
+                                new InsTestRes(
+                                        Result.getStreamer(),
+                                        Result.getTrace(),
+                                        Result.getAss_sn(),
+                                        Result.getType(),
+                                        Result.getCap(),
+                                        Result.getCutoff(),
+                                        Result.getNoise(),
+                                        Result.getLeakage())));
+            }
+        });
+        str = 0;
+
     }
 }
