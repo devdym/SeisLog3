@@ -10,23 +10,18 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import main.HibernateUtil;
 import main.entities.Batteries;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import main.general.ReadData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class battery_Controller {
     @FXML public ToggleButton errorsButton;
     @FXML public DatePicker BatteriesDate;
-    @FXML public Spinner minBankA;
-    @FXML public Spinner minBankB;
+    @FXML public Spinner<Double> minBankA;
+    @FXML public Spinner<Double> minBankB;
     @FXML public TreeTableView BattTable;
     @FXML public TreeTableColumn<Batteries, Number> bankAColumn;
     @FXML public TreeTableColumn<Batteries, Number> bankBColumn;
@@ -35,7 +30,7 @@ public class battery_Controller {
     @FXML public NumberAxis yAxisVolts;
 
     private final TreeItem<Batteries> rootB = new TreeItem<>();
-    private final List<LocalDate> BattDates = new ArrayList<>();
+    private List<LocalDate> BattDates = new ArrayList<>();
     private int str = 0;
 
     public void initialize() {
@@ -52,17 +47,8 @@ public class battery_Controller {
 
         //query dates from DB for DatePicker
         Runnable readBatteriesDates = () -> {
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            org.hibernate.Transaction transaction = session.beginTransaction();
+            BattDates = ReadData.readBattDate();
 
-            List<LocalDate> batteryDate =
-                    session.createQuery("SELECT DISTINCT date_ FROM Batteries order by date_ desc", LocalDate.class)
-                            .getResultList();
-            BattDates.addAll(batteryDate);
-            transaction.commit();
-
-            System.out.println(BattDates.get(0));
             BatteriesDate.setValue(BattDates.get(0));
         };
         new Thread(readBatteriesDates).start();
@@ -78,7 +64,7 @@ public class battery_Controller {
                         setDisable(true);
                         BattDates.forEach(d -> {
                             if (item.equals(d)) {
-                                setStyle("-fx-background-color: #41ee82;");
+                                setStyle("-fx-background-color: #FFCC00;");
                                 setDisable(false);
                             }
                         });
@@ -116,7 +102,7 @@ public class battery_Controller {
                         setText(item.toString());
                         setStyle(item.doubleValue() > 4.2
                                 ? ""
-                                : "-fx-background-color:red");
+                                : "-fx-text-fill:#FF6633");
                     }
                 }
             };
@@ -141,7 +127,7 @@ public class battery_Controller {
                         setText(item.toString());
                         setStyle(item.doubleValue() > 4.2
                                 ? ""
-                                : "-fx-background-color:red");
+                                : "-fx-text-fill:#FF6633");
                     }
                 }
             };
@@ -155,49 +141,19 @@ public class battery_Controller {
             List<Batteries> bt;
             if (errorsButton.isSelected()) {
                 System.out.println("selected");
-                minBankA.setDisable(true);
-                minBankB.setDisable(true);
-                bt = getAllBatt(date);
+                minBankA.setDisable(false);
+                minBankB.setDisable(false);
+                bt = ReadData.getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
                 fillTable(bt);
             }else {
                 System.out.println("NOT selected");
-                bt = getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
+                bt = ReadData.getAllBatt(date);
                 fillTable(bt);
-                minBankA.setDisable(false);
-                minBankB.setDisable(false);
+                minBankA.setDisable(true);
+                minBankB.setDisable(true);
             }
         };
         new Thread(getRes).start();
-    }
-
-    private static List<Batteries> getAllBatt(LocalDate date){
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        Query<Batteries> query =
-                session.createQuery("FROM Batteries where date_ like :dateupd",
-                        Batteries.class);
-        query.setParameter("dateupd", date);
-        List<Batteries> bt = query.getResultList();
-        transaction.commit();
-        return bt;
-    }
-
-    private static List<Batteries> getErrBatt(LocalDate date, Double min_a_v, Double min_b_v){
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        Query<Batteries> query =
-                session.createQuery("FROM Batteries where date_ like :dateupd and bankA < :minA or bankB < :minB",
-                        Batteries.class);
-        query.setParameter("dateupd", date);
-        query.setParameter("minA", min_a_v);
-        query.setParameter("minB", min_b_v);
-        List<Batteries> bt = query.getResultList();
-        transaction.commit();
-        return bt;
     }
 
     private void fillTable(List<Batteries> bt){
@@ -247,16 +203,8 @@ public class battery_Controller {
 
         Platform.runLater(() -> {
             String selected = unit.getUnitName();
-            System.out.println("selected unit " + selected);
 
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-
-            Query<Batteries> query = session.createQuery("FROM Batteries where unit like :u order by date_", Batteries.class);
-            query.setParameter("u", selected);
-            List<Batteries> sp = query.getResultList();
-            transaction.commit();
+            List<Batteries> sp = ReadData.readBattDataForGraph(selected);
 
             ObservableList<XYChart.Series<String, Double>> series = observableArrayList();
             series.retainAll();
@@ -273,8 +221,6 @@ public class battery_Controller {
 
             SpreadLC.getData().retainAll();
             SpreadLC.getData().addAll(series);
-            aSeries.getNode().setStyle("-fx-stroke: green;");
-            bSeries.getNode().setStyle("-fx-stroke: orange;");
         });
     }
 

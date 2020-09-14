@@ -6,229 +6,317 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="715.0" prefWidth="1035.0" spacing="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.insTest.insTest_Controller">
+<VBox prefHeight="715.0" prefWidth="1224.0" spacing="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.insTest.insTest_Controller">
   <SplitPane dividerPositions="0.7272727272727273" orientation="VERTICAL" prefHeight="537.0" prefWidth="642.0" VBox.vgrow="ALWAYS">
-    <items>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-        <children>
-          <HBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-              <VBox spacing="10.0" HBox.hgrow="NEVER">
-                <children>
-                  <DatePicker fx:id="InsTestDateDatePicker" prefHeight="25.0" prefWidth="100.0" showWeekNumbers="true" />
-                  <ToggleButton fx:id="errorsButton" mnemonicParsing="false" text="All / Errors only" />
-                  <Spinner fx:id="StrSP" prefHeight="25.0" prefWidth="100.0">
-                    <valueFactory>
-                      <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="1" max="14" min="1" />
-                    </valueFactory>
-                    <VBox.margin>
-                      <Insets top="20.0" />
-                    </VBox.margin>
-                  </Spinner>
-<!--                  <fx:define>-->
-<!--                    <ToggleGroup fx:id="myToggleGroup" />-->
-<!--                  </fx:define>-->
-                  <ToggleButton fx:id="CapButton" onAction="#ShowCap" prefHeight="26.0" prefWidth="100.0" selected="true" text="Cap" VBox.vgrow="ALWAYS">
-                    <toggleGroup>
-                      <ToggleGroup fx:id="myToggleGroup" />
-                    </toggleGroup></ToggleButton>
-                  <ToggleButton fx:id="CutButton" onAction="#ShowCut" prefHeight="26.0" prefWidth="100.0" text="Cut off" toggleGroup="$myToggleGroup" VBox.vgrow="ALWAYS" />
-                  <ToggleButton fx:id="LeakageButton" onAction="#ShowLeakage" prefHeight="26.0" prefWidth="100.0" text="Leakage" toggleGroup="$myToggleGroup" VBox.vgrow="ALWAYS" />
-                  <ToggleButton fx:id="NoiseButton" onAction="#ShowNoise" prefHeight="26.0" prefWidth="100.0" text="Noise" toggleGroup="$myToggleGroup" VBox.vgrow="ALWAYS" />
-                </children>
-                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                </padding>
-              </VBox>
-              <VBox spacing="10">
-                <children>
-                  <TreeTableView fx:id="InsTable" showRoot="false" VBox.vgrow="ALWAYS">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+      <HBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox spacing="10.0" HBox.hgrow="NEVER">
+          <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+          </padding>
+          <DatePicker fx:id="InsTestDateDatePicker" prefHeight="25.0" prefWidth="100.0" showWeekNumbers="true" />
+          <ToggleButton fx:id="errorsButton" mnemonicParsing="false" prefWidth="100.0" text="Errors only" />
+          <Spinner fx:id="StrSP" prefHeight="25.0" prefWidth="100.0">
+            <valueFactory>
+              <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="1" max="14" min="1" />
+            </valueFactory>
+            <VBox.margin>
+              <Insets top="20.0" />
+            </VBox.margin>
+          </Spinner>
+          <ToggleButton fx:id="CapButton" onAction="#ShowCap" prefHeight="26.0" prefWidth="100.0" selected="true" text="Cap" VBox.vgrow="ALWAYS">
+            <toggleGroup>
+              <ToggleGroup fx:id="myToggleGroup" />
+            </toggleGroup>
+          </ToggleButton>
+          <ToggleButton fx:id="CutButton" onAction="#ShowCut" prefHeight="26.0" prefWidth="100.0" text="Cut off" toggleGroup="$myToggleGroup" VBox.vgrow="ALWAYS" />
+          <ToggleButton fx:id="LeakageButton" onAction="#ShowLeakage" prefHeight="26.0" prefWidth="100.0" text="Leakage" toggleGroup="$myToggleGroup" VBox.vgrow="ALWAYS" />
+          <ToggleButton fx:id="NoiseButton" onAction="#ShowNoise" prefHeight="26.0" prefWidth="100.0" text="Noise" toggleGroup="$myToggleGroup" VBox.vgrow="ALWAYS" />
+        </VBox>
+        <VBox>
+          <TreeTableView fx:id="InsTable" showRoot="false" VBox.vgrow="ALWAYS">
+            <columns>
+              <TreeTableColumn text="Streamer">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="Streamer" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn text="Trace">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="trace" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn text="Ass_sn">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="ass_sn" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn text="Type">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="type" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="CapColumn" text="Cap">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="cap" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="CutoffColumn" text="Cut_off">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="cutoff" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="NoiseColumn" text="Noise">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="noise" />
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="LeakageColumn" text="Leakage">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="leakage" />
+                </cellValueFactory>
+              </TreeTableColumn>
+            </columns>
+          </TreeTableView>
+        </VBox>
+        <VBox HBox.hgrow="ALWAYS">
+          <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <Tab text="Stats">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <VBox layoutX="40.0" layoutY="75.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="LimitsTable" prefHeight="148.0" prefWidth="350.0" VBox.vgrow="NEVER">
                     <columns>
-                      <TreeTableColumn text="Streamer">
+                      <TableColumn prefWidth="75.0" text="Sensor Type">
                         <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="Streamer" />
+                          <PropertyValueFactory property="sensor_nb" />
                         </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn text="Trace">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="trace" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn text="Ass_sn">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="ass_sn" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn text="Type">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="type" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn fx:id="CapColumn" text="Cap">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="cap" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn fx:id="CutoffColumn" text="Cut_off">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="cutoff" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn fx:id="NoiseColumn" text="Noise">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="noise" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
-                      <TreeTableColumn fx:id="LeakageColumn" text="Leakage">
-                        <cellValueFactory>
-                          <TreeItemPropertyValueFactory property="leakage" />
-                        </cellValueFactory>
-                      </TreeTableColumn>
+                      </TableColumn>
+                      <TableColumn prefWidth="65.0" text="Capacitance">
+                        <columns>
+                          <TableColumn prefWidth="42.0" text="min">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="cap_min" />
+                            </cellValueFactory>
+                          </TableColumn>
+
+                          <TableColumn prefWidth="42.0" text="max">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="cap_max" />
+                            </cellValueFactory>
+                          </TableColumn>
+                        </columns>
+                      </TableColumn>
+                      <TableColumn prefWidth="76.0" text="Cut off">
+                        <columns>
+                          <TableColumn prefWidth="42.0" text="min">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="cutoff_min" />
+                            </cellValueFactory>
+                          </TableColumn>
+                          <TableColumn prefWidth="42.0" text="max">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="cutoff_max" />
+                            </cellValueFactory>
+                          </TableColumn>
+                        </columns>
+                      </TableColumn>
+                      <TableColumn prefWidth="149.0" text="Noise">
+                        <columns>
+                          <TableColumn prefWidth="42.0" text="max">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="noise" />
+                            </cellValueFactory>
+                          </TableColumn>
+                        </columns>
+                      </TableColumn>
+                      <TableColumn prefWidth="75.0" text="Leakage">
+                        <columns>
+                          <TableColumn prefWidth="42.0" text="min">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="leakage" />
+                            </cellValueFactory>
+                          </TableColumn>
+                        </columns>
+                      </TableColumn>
                     </columns>
-                  </TreeTableView>
-                </children>
-              </VBox>
-              <VBox spacing="10" HBox.hgrow="ALWAYS">
-                <children>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-                    <tabs>
-                      <Tab text="Limits">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                              <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <children>
-                                  <TextArea fx:id="calcInfoArea" VBox.vgrow="ALWAYS" />
-                                  <GridPane prefHeight="193.0" prefWidth="242.0">
-                                    <columnConstraints>
-                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                      <RowConstraints />
-                                    </rowConstraints>
-                                    <children>
-                                      <Label text="Precent from overall" />
-                                      <TextField text="15" GridPane.columnIndex="1" />
-                                      <TextField text="20" GridPane.columnIndex="2" />
+                  </TableView>
+                  <HBox prefHeight="137.0" prefWidth="251.0" VBox.vgrow="ALWAYS">
+                    <!--                                    <children>-->
+                    <BarChart fx:id="CapHistogram" animated="false" barGap="1.0" categoryGap="0.0" horizontalGridLinesVisible="false" legendVisible="false" prefHeight="150.0" prefWidth="115.0" verticalGridLinesVisible="false" HBox.hgrow="ALWAYS">
+                      <xAxis>
+                        <CategoryAxis side="BOTTOM" />
+                      </xAxis>
+                      <yAxis>
+                        <NumberAxis side="LEFT" />
+                      </yAxis>
+                    </BarChart>
+                    <BarChart fx:id="CutoffHistogram" animated="false" barGap="0.0" categoryGap="0.0" horizontalGridLinesVisible="false" legendVisible="false" prefHeight="150.0" prefWidth="79.0" verticalGridLinesVisible="false" HBox.hgrow="ALWAYS">
+                      <xAxis>
+                        <CategoryAxis side="BOTTOM" />
+                      </xAxis>
+                      <yAxis>
+                        <NumberAxis side="LEFT" />
+                      </yAxis>
+                    </BarChart>
+                    <!--                                    </children>-->
+                  </HBox>
+                  <TableView fx:id="resultsTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="Streamer">
+                        <cellValueFactory>
+                          <PropertyValueFactory property="streamer" />
+                        </cellValueFactory>
+                      </TableColumn>
+                      <TableColumn prefWidth="75.0" text="Faults">
+                        <columns>
+                          <TableColumn prefWidth="50.0" text="Total">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="total" />
+                            </cellValueFactory>
+                          </TableColumn>
+                          <TableColumn prefWidth="50.0" text="Capacitance">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="cap" />
+                            </cellValueFactory>
+                          </TableColumn>
+                          <TableColumn prefWidth="50.0" text="Cut off">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="cutoff" />
+                            </cellValueFactory>
+                          </TableColumn>
+                          <TableColumn prefWidth="50.0" text="Noise">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="noise" />
+                            </cellValueFactory>
+                          </TableColumn>
+                          <TableColumn prefWidth="50.0" text="Leakage">
+                            <cellValueFactory>
+                              <PropertyValueFactory property="leakage" />
+                            </cellValueFactory>
+                          </TableColumn>
+                        </columns>
+                      </TableColumn>
+                    </columns>
+                  </TableView>
+                </VBox>
+              </AnchorPane>
+            </Tab>
+            <Tab text="Limits">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TextArea fx:id="calcInfoArea" VBox.vgrow="ALWAYS" />
+                  <GridPane prefHeight="193.0" prefWidth="242.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                      <RowConstraints />
+                    </rowConstraints>
+                    <Label text="Percent from overall" />
+                    <TextField text="15" GridPane.columnIndex="1" />
+                    <TextField text="20" GridPane.columnIndex="2" />
 
-                                      <Label text="Streamer Low cut Frequency  2Hz" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                                      <Label text="Water Dencity (Specific Gravity)  1.025 S.G." GridPane.columnSpan="3" GridPane.rowIndex="2" />
-                                      <Label text="Streamer Depth" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                                      <Label text="Water Temperature" GridPane.rowIndex="5" />
-                                      <Spinner fx:id="tS2" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="tS3" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="tS5" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="tS6" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="dS3" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="tS4" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="dS2" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="dS5" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="dS6" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <Spinner fx:id="dS4" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                                        <valueFactory>
-                                          <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
-                                        </valueFactory>
-                                      </Spinner>
-                                      <TextField fx:id="lkgTF" text="1" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                      <TextField fx:id="capTolTF" text="15" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                      <TextField fx:id="noiseTF" text="250" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                      <TextField fx:id="cutTolTF" text="25" GridPane.columnIndex="3" />
-                                      <Label text="Cut Tol" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                                      <Label text="Cap Tol" GridPane.rowIndex="3" />
-                                    </children>
-                                  </GridPane>
-                                </children>
-                              </VBox>
-                            </children>
-                          </AnchorPane>
-                        </content>
-                      </Tab>
-                      <Tab text="Stats">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </Tab>
-                    </tabs>
-                  </TabPane>
-
-                </children>
-              </VBox>
-            </children>
-          </HBox>
-        </children>
-      </AnchorPane>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-        <children>
-          <LineChart fx:id="SpreadLC" animated="false" createSymbols="false" title="Streamer" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <xAxis>
-              <CategoryAxis label="Trace" fx:id="xAxisIns" />
-            </xAxis>
-            <yAxis>
-              <NumberAxis fx:id="yAxisIns" label="value" />
-            </yAxis>
-          </LineChart>
-        </children>
-      </AnchorPane>
-    </items>
+                    <Label text="Streamer Low cut Frequency  2Hz" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                    <Label text="Water Density (Specific Gravity)  1.025 S.G." GridPane.columnSpan="3" GridPane.rowIndex="2" />
+                    <Label text="Streamer Depth" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                    <Label text="Water Temperature" GridPane.rowIndex="5" />
+                    <Spinner fx:id="tS2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="tS3" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="tS5" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="tS6" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="dS3" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="tS4" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="dS2" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="dS5" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="dS6" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <Spinner fx:id="dS4" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                      <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="0" />
+                      </valueFactory>
+                    </Spinner>
+                    <TextField fx:id="lkgTF" text="1" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <TextField fx:id="capTolTF" text="15" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                    <TextField fx:id="noiseTF" text="250" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                    <TextField fx:id="cutTolTF" text="25" GridPane.columnIndex="3" />
+                    <Label text="Cut Tol" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                    <Label text="Cap Tol" GridPane.rowIndex="3" />
+                  </GridPane>
+                </VBox>
+              </AnchorPane>
+            </Tab>
+          </TabPane>
+        </VBox>
+      </HBox>
+    </AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+      <LineChart fx:id="SpreadLC" animated="false" createSymbols="false" title="Streamer" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <xAxis>
+          <CategoryAxis label="Trace" fx:id="xAxisIns" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="yAxisIns" label="value" />
+        </yAxis>
+      </LineChart>
+    </AnchorPane>
   </SplitPane>
 </VBox>

@@ -1,21 +1,21 @@
 
 .root {
-    -fx-background-color: #62676a;
+    -fx-background-color: #CCCCCC;
 }
 
 .button {
-    -fx-background-color: #3c3f41;
-    -fx-text-fill: #bbbbbb;
-    -fx-border-color: aliceblue;
+    -fx-background-color: #62676a;
+    -fx-text-fill: #CCCCCC;
+    -fx-border-color: #CCCCCC;
     -fx-border-radius: 3;
 }
 
 .tab-pane .tab-header-background {
-    -fx-background-color: #62676a;
+    -fx-background-color: #CCCCCC;
 }
 
 .tab-pane {
-    -fx-background-color: #3c3f41;
+    -fx-background-color: #3C3F41;
     -fx-tab-min-width:90px;
 }
 
@@ -24,23 +24,23 @@
 /*}*/
 
 .tab-pane .tab {
-    -fx-background-color: #3c3f41;
+    -fx-background-color: #62676A;
 }
 
 .tab-pane .tab:selected {
-    -fx-background-color: #525659;
+    -fx-background-color: #3C3F41;
 }
 
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: aliceblue;
+    -fx-text-fill: #CCCCCC;
     /*-fx-font-size: 12px;*/
     -fx-font-weight: normal;
 }
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: aliceblue;
+    -fx-text-fill: #CCCCCC;
     -fx-font-weight: bold;
 }
 
@@ -53,12 +53,12 @@
 }
 
 .table-view .column-header-background{
-    -fx-background-color: #3c3f41;
+    -fx-background-color: #3C3F41;
 }
 
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: #CCCCCC;
 }
 
 .table-view .column-header {
@@ -66,12 +66,12 @@
 }
 
 .table-view .table-cell{
-    -fx-text-fill: #bbbbbb;
+    -fx-text-fill: #CCCCCC;
 }
 
 
 .table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #616161;
+    -fx-background-color: -fx-table-cell-border-color, #62676A;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
@@ -83,27 +83,19 @@
 }*/
 
 .table-row-cell:selected {
-    -fx-background-color: #bbbbbb;
+    -fx-background-color: #62676A;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
-    -fx-text-fill: #3c3f41;
+    -fx-text-fill: #CCCCCC;
 }
 
 .table-view .filler {
     -fx-background-color: transparent;
 }
 
-.aSeries.chart-series-line {
-    -fx-stroke: red;
-}
-.bSeries.chart-series-line {
-    -fx-stroke: red;
-}
-
-
-.default-color0.chart-series-line { -fx-stroke: #8F528D; }
-.default-color1.chart-series-line { -fx-stroke: #C369C3; }
-.default-color2.chart-series-line { -fx-stroke: #2752A9; }
+.default-color0.chart-series-line { -fx-stroke: #FFCC00; }
+.default-color1.chart-series-line { -fx-stroke: #FF6633; }
+.default-color2.chart-series-line { -fx-stroke: #0088cc; }
 .default-color3.chart-series-line { -fx-stroke: #3586FF; }
 .default-color4.chart-series-line { -fx-stroke: #51FFFF; }
 .default-color5.chart-series-line { -fx-stroke: #23A723; }
@@ -114,11 +106,10 @@
 .default-color10.chart-series-line { -fx-stroke: #FD6A6A; }
 .default-color11.chart-series-line { -fx-stroke: #FF4343; }
 .default-color12.chart-series-line { -fx-stroke: #A72323; }
-.default-color13.chart-series-line { -fx-stroke: #955C5C; }
 
-.default-color0.chart-line-symbol { -fx-background-color: #8F528D, #8F528D; }
-.default-color1.chart-line-symbol { -fx-background-color: #C369C3, #C369C3; }
-.default-color2.chart-line-symbol { -fx-background-color: #2752A9, #2752A9; }
+.default-color0.chart-line-symbol { -fx-background-color: #FFCC00, #FFCC00; }
+.default-color1.chart-line-symbol { -fx-background-color: #FF6633, #FF6633; }
+.default-color2.chart-line-symbol { -fx-background-color: #0088cc, #0088cc; }
 .default-color3.chart-line-symbol { -fx-background-color: #3586FF, #3586FF; }
 .default-color4.chart-line-symbol { -fx-background-color: #51FFFF, #51FFFF; }
 .default-color5.chart-line-symbol { -fx-background-color: #23A723, #23A723; }
@@ -129,43 +120,38 @@
 .default-color10.chart-line-symbol { -fx-background-color: #FD6A6A, #FD6A6A; }
 .default-color11.chart-line-symbol { -fx-background-color: #FF4343, #FF4343; }
 .default-color12.chart-line-symbol { -fx-background-color: #A72323, #A72323; }
-.default-color13.chart-line-symbol { -fx-background-color: #955C5C, #955C5C; }
-
-
-
-
 
 /* .        */
 .tree-table-row-cell {
-    -fx-background: #616161;
-    -fx-text-fill: aliceblue;
+    -fx-background: #3C3F41;
+    -fx-text-fill: #CCCCCC;
 }
 
 .tree-table-view {
-    -fx-background-color: #616161;
-    -fx-text-fill: aliceblue;
+    -fx-background-color: #62676A;
+    -fx-text-fill: #CCCCCC;
 }
 
 .tree-table-view .column-header-background{
-    -fx-background-color: linear-gradient(#131313 0%, #424141 100%);
+    -fx-background-color: #62676A
 }
 
 .tree-table-view .column-header-background{
-    -fx-background-color: linear-gradient(#131313 0%, #424141 100%);
+    -fx-background-color: #3C3F41
 }
 
 .tree-table-view .column-header-background{
-    -fx-background-color: linear-gradient(#131313 0%, #424141 100%);
+    -fx-background-color: #3C3F41
 }
 
 .tree-table-view .column-header-background .label{
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: #CCCCCC;
 }
 
 .tree-table-view .column-header {
     -fx-background-color: transparent;
-    -fx-text-fill: aliceblue;
+    -fx-text-fill: #CCCCCC;
 }
 
 .split-pane {
@@ -177,14 +163,13 @@
 }
 
 .text-area {
-    -fx-text-fill: greenyellow;
+    -fx-text-fill: #FFCC00;
     -fx-font-weight: bold;
 }
 
 .text-area .content{
-    -fx-background-color: #3c3f41;
+    -fx-background-color: #62676A;
 }
-
 
 .check-box {
     -fx-text-fill: #bbbbbb;
@@ -198,38 +183,44 @@
 }
 
 .label {
-    -fx-text-fill: #bbbbbb;
+    -fx-text-fill: #CCCCCC;
     -fx-stroke: black;
 }
 
-
-
 .toggle-button {
-    -fx-text-fill: #bbbbbb;
-    -fx-background-color: slategray;
+    -fx-text-fill: #3C3F41;
+    -fx-background-color: #62676A;
     -fx-border-color: transparent;
 }
 .toggle-button:selected {
-    -fx-text-fill: #3c3f41;
-    -fx-background-color: aliceblue;
+    -fx-text-fill: #3C3F41;
+    -fx-background-color: #FFCC00;
     -fx-border-color: transparent;
 }
 
 .axis {
-    -fx-tick-label-fill: #bbbbbb;
-    -fx-text-fill: #bbbbbb;
+    -fx-tick-label-fill: #CCCCCC;
+    -fx-text-fill: #CCCCCC;
 
 }
 .chart {
-    -fx-text-fill: #bbbbbb;
+    -fx-text-fill: #CCCCCC;
     -fx-stroke: black;
     -fx-fill: black;
 }
 .chart-horizontal-grid-lines {
-    -fx-stroke: #666666;
+    -fx-stroke: #CCCCCC;
 }
 
 .default-color0.chart-bar  {
-    -fx-bar-fill: yellow;
+    -fx-bar-fill: #FFCC00;
 }
 
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-body-color: #FFCC00;
+}
+
+.date-picker {
+    -fx-background-color: #FFCC00;
+}

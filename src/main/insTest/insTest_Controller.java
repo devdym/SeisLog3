@@ -1,32 +1,23 @@
 package main.insTest;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import main.Controller;
-import main.HibernateUtil;
 import main.entities.InsTestLimits;
 import main.entities.InsTestRes;
 import main.general.ReadData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
+import java.util.stream.Collectors;
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class insTest_Controller {
@@ -35,25 +26,25 @@ public class insTest_Controller {
 
     @FXML public DatePicker InsTestDateDatePicker;
     @FXML public TextArea calcInfoArea;
-    @FXML public Spinner dS2;
-    @FXML public Spinner dS3;
-    @FXML public Spinner dS4;
-    @FXML public Spinner dS5;
-    @FXML public Spinner dS6;
-    @FXML public Spinner tS2;
-    @FXML public Spinner tS3;
-    @FXML public Spinner tS4;
-    @FXML public Spinner tS5;
-    @FXML public Spinner tS6;
+    @FXML public Spinner<Integer> dS2;
+    @FXML public Spinner<Integer> dS3;
+    @FXML public Spinner<Integer> dS4;
+    @FXML public Spinner<Integer> dS5;
+    @FXML public Spinner<Integer> dS6;
+    @FXML public Spinner<Integer> tS2;
+    @FXML public Spinner<Integer> tS3;
+    @FXML public Spinner<Integer> tS4;
+    @FXML public Spinner<Integer> tS5;
+    @FXML public Spinner<Integer> tS6;
     @FXML public TextField lkgTF;
     @FXML public TextField noiseTF;
     @FXML public TextField capTolTF;
     @FXML public TextField cutTolTF;
-    @FXML public LineChart SpreadLC;
+    @FXML public LineChart<String, Number> SpreadLC;
     @FXML public CategoryAxis xAxisIns;
     @FXML public NumberAxis yAxisIns;
-    @FXML public Spinner StrSP;
-    @FXML public TreeTableView InsTable;
+    @FXML public Spinner<Integer> StrSP;
+    @FXML public TreeTableView<InsTestRes> InsTable;
     @FXML public TreeTableColumn<InsTestRes, Number> CapColumn;
     @FXML public TreeTableColumn<InsTestRes, Number> CutoffColumn;
     @FXML public TreeTableColumn<InsTestRes, Number> NoiseColumn;
@@ -63,26 +54,56 @@ public class insTest_Controller {
     @FXML public ToggleButton LeakageButton;
     @FXML public ToggleButton NoiseButton;
     @FXML public ToggleButton errorsButton;
+    @FXML public TableView<InsTestLimits> LimitsTable;
+    @FXML public TableView<resultTable> resultsTable;
+    @FXML public BarChart<Number, Number> CapHistogram;
+    @FXML public BarChart<Number, Number> CutoffHistogram;
 
-    private TreeItem<InsTestRes> root = new TreeItem<>();
+    private final TreeItem<InsTestRes> root = new TreeItem<>();
     private List<LocalDate> InsTestDates = new ArrayList<>();
     private int str = 0;
     DecimalFormat DecFormatOneOne = new DecimalFormat("#.#");
     List<InsTestLimits> CalculatedLimits = new ArrayList<>();
 
     public void initialize() {
-        InsTable.setRoot(root);
         //TODO Select last date
 
-        InsTestDates = Controller.getInsTestDates();
-        errorsButton.setSelected(true);
-        // table select listener
-        InsTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener<TreeItem<InsTestRes>>)
-                (observable, oldValue, newValue) -> drawChGraph(newValue.getValue()));
+        //Control pane
+        InsTestDates = ReadData.getInsTestDates();
 
+        // Date Picker color code
+        final Callback<DatePicker, DateCell> InsDateFactory = new Callback<>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setDisable(true);
+                        InsTestDates.forEach(date -> {
+                            if (item.equals(date)) {
+                                setStyle("-fx-background-color: #FFCC00;");
+                                setDisable(false);
+                            }
+                        });
+                    }
+                };
+            }
+        };
+        InsTestDateDatePicker.setDayCellFactory(InsDateFactory);
+        // Date Picker on Action
+        InsTestDateDatePicker.setOnAction(event -> update(InsTestDateDatePicker.getValue()));
+        //Errors only button
+        errorsButton.setSelected(true);
+        errorsButton.setOnAction(event -> update(InsTestDateDatePicker.getValue()));
+
+        //Result Table
+        InsTable.setRoot(root);
+        // table select listener
+        InsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> drawChGraph(newValue.getValue()));
         // table color code
         CapColumn.setCellFactory((TreeTableColumn<InsTestRes, Number> param) -> {
-            TreeTableCell cell = new TreeTableCell<InsTestRes, Number>(){
+            TreeTableCell<InsTestRes, Number> cell = new TreeTableCell<>(){
                 @Override
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
@@ -99,38 +120,12 @@ public class insTest_Controller {
                         setText(item.toString());
                         setStyle(item.doubleValue() > 219.0
                                 ? ""
-                                : "-fx-background-color:red");
+                                : "-fx-text-fill: #FF6633");
                     }
                 }
             };
             return cell;
         });
-
-        //InsDate Picker
-        final Callback<DatePicker, DateCell> InsDateFactory = new Callback<>() {
-            @Override
-            public DateCell call(DatePicker param) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        setDisable(true);
-                        InsTestDates.forEach(date -> {
-                            if (item.equals(date)) {
-                                setStyle("-fx-background-color: #3c3fee;");
-                                setDisable(false);
-                            }
-                        });
-                    }
-                };
-            }
-        };
-        // Date Picker color code
-        InsTestDateDatePicker.setDayCellFactory(InsDateFactory);
-        // Date Picker on Action
-        InsTestDateDatePicker.setOnAction(event -> update());
-
-        errorsButton.setOnAction(event -> update());
 
         tS2.valueProperty().addListener((observable) -> limitsFunc());
         tS3.valueProperty().addListener((observable) -> limitsFunc());
@@ -144,28 +139,164 @@ public class insTest_Controller {
         dS6.valueProperty().addListener((observable) -> limitsFunc());
     }
 
-    private void update(){
+    private void update(LocalDate date){
         //clear table
         root.getChildren().clear();
 
         //populate tree table
-        LocalDate date = InsTestDateDatePicker.getValue();
-        Runnable getRes = () -> {
-
+        Platform.runLater(() -> {
             List<InsTestLimits> lim = ReadData.getInsTestLimits(date);
-            List<InsTestRes> res;
-            logger.warn(lim.toString());
+            //fill limits table
+            final ObservableList<InsTestLimits> data = FXCollections.observableArrayList(lim);
+            LimitsTable.setItems(data);
+
+            List<InsTestRes> res = ReadData.getInsTestRes(date);
 
             if(errorsButton.isSelected()){
-                logger.warn("get all InsTest result");
-                res = ReadData.getInsTestResErrOnly(date, lim);
+                List<InsTestRes> resErrorsOnly = new ArrayList<>();
+                logger.warn("get errors only InsTest result");
+
+                // filter Cap
+                for(InsTestLimits l : lim){
+                    List<InsTestRes> capError;
+                    capError = res.stream()
+                            .filter(c -> (c.getCap() < l.getCap_min()
+                                    || l.getCap_max() < c.getCap()
+                                    && c.getType() == l.getSensor_nb()))
+                            .collect(Collectors.toList());
+                    resErrorsOnly.addAll(capError);
+                }
+                // filter Cutoff
+                for(InsTestLimits l : lim){
+                    List<InsTestRes> cutoffError;
+                    cutoffError = res.stream()
+                            .filter(c -> (c.getCutoff() < l.getCutoff_min()
+                                    || l.getCutoff_max() < c.getCutoff()
+                                    && c.getType() == l.getSensor_nb()))
+                            .collect(Collectors.toList());
+                    resErrorsOnly.addAll(cutoffError);
+                }
+                // filter Leakage
+                for(InsTestLimits l : lim){
+                    List<InsTestRes> leakageError;
+                    leakageError = res.stream()
+                            .filter(c -> (c.getLeakage() < l.getLeakage()
+                                    && c.getType() == l.getSensor_nb()))
+                            .collect(Collectors.toList());
+                    resErrorsOnly.addAll(leakageError);
+                }
+                // filter Leakage
+                for(InsTestLimits l : lim){
+                    List<InsTestRes> noiseError;
+                    noiseError = res.stream()
+                            .filter(c -> (c.getNoise() > l.getNoise()
+                                    && c.getType() == l.getSensor_nb()))
+                            .collect(Collectors.toList());
+                    resErrorsOnly.addAll(noiseError);
+                }
+
+                List<InsTestRes> listWithoutDuplicates = resErrorsOnly.stream()
+                        .distinct()
+                        .collect(Collectors.toList());
+
+                Collections.sort(listWithoutDuplicates, new Sortbystr());
+                fillTable(listWithoutDuplicates);
+
+                getStats(listWithoutDuplicates);
             } else {
-                logger.warn("get errors InsTest result");
-                res = ReadData.getInsTestRes(date);
+                logger.warn("get all InsTest result");
+                fillTable(res);
             }
-            fillTable(res);
-        };
-        new Thread(getRes).start();
+
+            //build histogram
+            List<Double> capHist = new ArrayList<>();
+            List<Double> cutoffHist = new ArrayList<>();
+
+            for(InsTestRes r : res){
+                capHist.add(r.getCap());
+                cutoffHist.add(r.getCutoff());
+            }
+            //get min
+            double capMin = capHist.stream().min(Comparator.comparing(Double::valueOf)).get();
+            double cutoffMin = cutoffHist.stream().min(Comparator.comparing(Double::valueOf)).get();
+
+            //get max
+            double capMax = capHist.stream().max(Comparator.comparing(Double::valueOf)).get();
+            double cutoffMax = cutoffHist.stream().max(Comparator.comparing(Double::valueOf)).get();
+
+            XYChart.Series capSeries1 = new XYChart.Series();
+            XYChart.Series cutoffSeries1 = new XYChart.Series();
+
+            //bin nb
+            int capbin = 10;
+            double cutoffbin = 0.2;
+
+            double capIter = capMin;
+            while(capIter < capMax){
+                capIter = capIter + capbin;
+                double i = capIter;
+                long st = res.stream().filter(c -> c.getCap() < i
+                        && c.getCap() < i + capbin )
+                        .count();
+                String com = i + "-" + (i + capbin);
+                capSeries1.getData().add(new XYChart.Data(com, (int) st));
+            }
+            CapHistogram.getData().retainAll();
+            CapHistogram.getData().add(capSeries1);
+
+            double cutoffIter = cutoffMin;
+            while(cutoffIter < cutoffMax){
+                cutoffIter = cutoffIter + cutoffbin;
+                double i = cutoffIter;
+                long st = res.stream().filter(c -> c.getCutoff() < i
+                        && c.getCutoff() < i + cutoffbin )
+                        .count();
+                String com = String.format("%.1f", i) + "-" + String.format("%.1f", i+cutoffbin);
+                cutoffSeries1.getData().add(new XYChart.Data(com, (int) st));
+            }
+            CutoffHistogram.getData().retainAll();
+            CutoffHistogram.getData().add(cutoffSeries1);
+        });
+    }
+
+    public void getStats(List<InsTestRes> resErrorsOnly){
+        final ObservableList<resultTable> resData =
+                FXCollections.observableArrayList();
+
+        long totalS1 = resErrorsOnly.stream()
+                .filter(c -> (1 == c.getStreamer()))
+                .count();
+        resData.add(new resultTable(1, 0, 0, 0, 0, (int)totalS1));
+        long totalS2 = resErrorsOnly.stream()
+                .filter(c -> (2 == c.getStreamer()))
+                .count();
+        resData.add(new resultTable(2, 0, 0, 0, 0, (int)totalS2));
+        long totalS3 = resErrorsOnly.stream()
+                .filter(c -> (3 == c.getStreamer()))
+                .count();
+        resData.add(new resultTable(3, 0, 0, 0, 0, (int)totalS3));
+        long totalS4 = resErrorsOnly.stream()
+                .filter(c -> (4 == c.getStreamer()))
+                .count();
+        resData.add(new resultTable(4, 0, 0, 0, 0, (int)totalS4));
+        long totalS5 = resErrorsOnly.stream()
+                .filter(c -> (5 == c.getStreamer()))
+                .count();
+        resData.add(new resultTable(5, 0, 0, 0, 0, (int)totalS5));
+        long totalS6 = resErrorsOnly.stream()
+                .filter(c -> (6 == c.getStreamer()))
+                .count();
+        resData.add(new resultTable(6, 0, 0, 0, 0, (int)totalS6));
+
+        resultsTable.setItems(resData);
+
+    }
+
+    //        Collections.sort(result, new Sortbystr());
+    static class Sortbystr implements Comparator<InsTestRes> {
+        public int compare(InsTestRes a, InsTestRes b){
+            return a.getStreamer() - b.getStreamer();
+        }
     }
 
     private void limitsFunc() {
@@ -177,17 +308,17 @@ public class insTest_Controller {
         List<Integer> te = new ArrayList<>();
         List<Integer> pr = new ArrayList<>();
 
-        te.add((Integer) tS2.getValue());
-        te.add((Integer) tS3.getValue());
-        te.add((Integer) tS4.getValue());
-        te.add((Integer) tS5.getValue());
-        te.add((Integer) tS6.getValue());
+        te.add(tS2.getValue());
+        te.add(tS3.getValue());
+        te.add(tS4.getValue());
+        te.add(tS5.getValue());
+        te.add(tS6.getValue());
 
-        pr.add((Integer) dS2.getValue());
-        pr.add((Integer) dS3.getValue());
-        pr.add((Integer) dS4.getValue());
-        pr.add((Integer) dS5.getValue());
-        pr.add((Integer) dS6.getValue());
+        pr.add(dS2.getValue());
+        pr.add(dS3.getValue());
+        pr.add(dS4.getValue());
+        pr.add(dS5.getValue());
+        pr.add(dS6.getValue());
 
         calcInfoArea.setText("");
         calcInfoArea.appendText("-- Calculated limits capacitance " + capTol + "% and cut off " + CutoffTol + "% --\n");
@@ -222,7 +353,6 @@ public class insTest_Controller {
         //--------
         s = 2;
         for (Integer i : te) {
-
             double temp = i;
             double pressure = pr.get(te.indexOf(i));
             capTol = Double.valueOf(capTolTF.getText());
@@ -236,8 +366,6 @@ public class insTest_Controller {
 
             minCutoff = cutoff - (cutoff * CutoffTol / 100);
             maxCutoff = cutoff + (cutoff * CutoffTol / 100);
-
-            //   CalculatedLimits.add(new Limits(selectedDate, Double.valueOf(noiseTF.getText()), minCap, maxCap, Double.valueOf(lkgTF.getText()), minCutoff, maxCutoff, s));
             s++;
         }
     }
@@ -246,24 +374,14 @@ public class insTest_Controller {
         System.out.println("cap was selected");
 
         Platform.runLater(() -> {
-            int SelStr = (Integer)StrSP.getValue();
-
+            int SelStr = StrSP.getValue();
             LocalDate date = InsTestDateDatePicker.getValue();
+            List<InsTestRes> sp = ReadData.getCapGraphData(SelStr, date);
 
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-
-            Query<InsTestRes> query = session.createQuery("FROM InsTestRes where updated like :dateupd and streamer = :str", InsTestRes.class);
-            query.setParameter("dateupd", date);
-            query.setParameter("str", SelStr);
-            List<InsTestRes> sp = query.getResultList();
-            transaction.commit();
-
-            XYChart.Series aSeries = new XYChart.Series();
+            XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
 
             for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data(sp.get(i).getTrace(), sp.get(i).getCap()));
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(sp.get(i).getTrace()), sp.get(i).getCap()));
             }
             aSeries.setName("Cap");
 
@@ -277,23 +395,13 @@ public class insTest_Controller {
 
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
-
             LocalDate date = InsTestDateDatePicker.getValue();
+            List<InsTestRes> sp = ReadData.getCutGraphData(SelStr, date);
 
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-
-            Query<InsTestRes> query = session.createQuery("FROM InsTestRes where updated like :dateupd and streamer = :str", InsTestRes.class);
-            query.setParameter("dateupd", date);
-            query.setParameter("str", SelStr);
-            List<InsTestRes> sp = query.getResultList();
-            transaction.commit();
-
-            XYChart.Series aSeries = new XYChart.Series();
+            XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
 
             for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data(sp.get(i).getTrace(), sp.get(i).getCutoff()));
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(sp.get(i).getTrace()), sp.get(i).getCutoff()));
             }
             aSeries.setName("cutoff");
 
@@ -306,23 +414,13 @@ public class insTest_Controller {
     @FXML public void ShowLeakage(ActionEvent actionEvent) {
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
-
             LocalDate date = InsTestDateDatePicker.getValue();
+            List<InsTestRes> sp = ReadData.getLeakageGraphData(SelStr, date);
 
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-
-            Query<InsTestRes> query = session.createQuery("FROM InsTestRes where updated like :dateupd and streamer = :str", InsTestRes.class);
-            query.setParameter("dateupd", date);
-            query.setParameter("str", SelStr);
-            List<InsTestRes> sp = query.getResultList();
-            transaction.commit();
-
-            XYChart.Series aSeries = new XYChart.Series();
+            XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
 
             for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data(sp.get(i).getTrace(), sp.get(i).getLeakage()));
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(sp.get(i).getTrace()), sp.get(i).getLeakage()));
             }
             aSeries.setName("leakage");
 
@@ -334,23 +432,13 @@ public class insTest_Controller {
     @FXML public void ShowNoise(ActionEvent actionEvent) {
         Platform.runLater(() -> {
             int SelStr = (Integer)StrSP.getValue();
-
             LocalDate date = InsTestDateDatePicker.getValue();
-
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-
-            Query<InsTestRes> query = session.createQuery("FROM InsTestRes where updated like :dateupd and streamer = :str", InsTestRes.class);
-            query.setParameter("dateupd", date);
-            query.setParameter("str", SelStr);
-            List<InsTestRes> sp = query.getResultList();
-            transaction.commit();
+            List<InsTestRes> sp = ReadData.getNoiseGraphData(SelStr, date);
 
             XYChart.Series aSeries = new XYChart.Series();
 
             for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data(sp.get(i).getTrace(), sp.get(i).getNoise()));
+                aSeries.getData().add(new XYChart.Data(Integer.toString(sp.get(i).getTrace()), sp.get(i).getNoise()));
             }
             aSeries.setName("noise");
 
@@ -363,49 +451,87 @@ public class insTest_Controller {
         System.out.println("ShowIntGraph selected");
 
         Platform.runLater(() -> {
-            int selected = section.getType();
-            System.out.println("selected unit " + selected);
+            int selected = section.getAss_sn();
 
-            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
+            List<InsTestRes> sp = ReadData.getChGraphData(selected);
 
-            Query<InsTestRes> query = session.createQuery("FROM InsTestRes where ass_sn = :s order by updated", InsTestRes.class);
-            query.setParameter("s", selected);
-            List<InsTestRes> sp = query.getResultList();
-            transaction.commit();
+            List<Integer> sectionTrace = new ArrayList<>();
+            for(InsTestRes r : sp){
+                sectionTrace.add(r.getTrace());
+            }
+            List<Integer> dTrace = sectionTrace.stream().distinct().collect(Collectors.toList());
 
-            ObservableList<XYChart.Series<String, Double>> series = observableArrayList();
+            ObservableList<XYChart.Series<String, Number>> series = observableArrayList();
             series.retainAll();
-            XYChart.Series Series1 = new XYChart.Series();
-            XYChart.Series Series2 = new XYChart.Series();
-            XYChart.Series Series3 = new XYChart.Series();
-            XYChart.Series Series4 = new XYChart.Series();
-            XYChart.Series Series5 = new XYChart.Series();
-            XYChart.Series Series6 = new XYChart.Series();
-            XYChart.Series Series7 = new XYChart.Series();
-            XYChart.Series Series8 = new XYChart.Series();
-            XYChart.Series Series9 = new XYChart.Series();
-            XYChart.Series Series10 = new XYChart.Series();
-            XYChart.Series Series11 = new XYChart.Series();
-            XYChart.Series Series12 = new XYChart.Series();
+            XYChart.Series<String, Number> Series1 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series2 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series3 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series4 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series5 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series6 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series7 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series8 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series9 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series10 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series11 = new XYChart.Series<>();
+            XYChart.Series<String, Number> Series12 = new XYChart.Series<>();
 
             for (InsTestRes instestres : sp) {
-                if(instestres.getTrace() == 1){
-                    Series1.getData().add(new XYChart.Data(instestres.getUpdated().toString(), instestres.getCap()));
+                if(instestres.getTrace() == dTrace.get(0)){
+                    Series1.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
                 }
-                if(instestres.getTrace() == 2){
-                    Series2.getData().add(new XYChart.Data(instestres.getUpdated().toString(), instestres.getCap()));
+                if(instestres.getTrace() == dTrace.get(1)){
+                    Series2.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(2)){
+                    Series3.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(3)){
+                    Series4.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(4)){
+                    Series5.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(5)){
+                    Series6.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(6)){
+                    Series7.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(7)){
+                    Series8.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(8)){
+                    Series9.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(9)){
+                    Series10.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(10)){
+                    Series11.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
+                }
+                if(instestres.getTrace() == dTrace.get(11)){
+                    Series12.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
                 }
             }
             Series1.setName("trace 1");
             Series2.setName("trace 2");
-            series.addAll(Series1, Series2);
-
+            Series3.setName("trace 3");
+            Series4.setName("trace 4");
+            Series5.setName("trace 5");
+            Series6.setName("trace 6");
+            Series7.setName("trace 7");
+            Series8.setName("trace 8");
+            Series9.setName("trace 9");
+            Series10.setName("trace 10");
+            Series11.setName("trace 11");
+            Series12.setName("trace 12");
+            series.addAll(Series1, Series2, Series3, Series4, Series5, Series6,
+                    Series7, Series8, Series9, Series10, Series11, Series12);
+            yAxisIns.setLabel("Cap");
+            xAxisIns.setLabel("Date");
             SpreadLC.getData().retainAll();
             SpreadLC.getData().addAll(series);
-//            aSeries.getNode().setStyle("-fx-stroke: green;");
-//            bSeries.getNode().setStyle("-fx-stroke: orange;");
         });
     }
 
@@ -430,8 +556,8 @@ public class insTest_Controller {
                                 new InsTestRes(
                                         Result.getStreamer(),
                                         Result.getTrace(),
-                                        Result.getAss_sn(),
                                         Result.getType(),
+                                        Result.getAss_sn(),
                                         Result.getCap(),
                                         Result.getCutoff(),
                                         Result.getNoise(),
@@ -445,8 +571,8 @@ public class insTest_Controller {
                                 new InsTestRes(
                                         Result.getStreamer(),
                                         Result.getTrace(),
-                                        Result.getAss_sn(),
                                         Result.getType(),
+                                        Result.getAss_sn(),
                                         Result.getCap(),
                                         Result.getCutoff(),
                                         Result.getNoise(),
