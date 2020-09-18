@@ -5,6 +5,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
@@ -43,22 +44,27 @@
     </MenuBar>
     <SplitPane dividerPositions="0.06513026052104208, 0.7965931863727455" focusTraversable="true" prefHeight="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0">
+        <AnchorPane fx:id="projectInfo" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="70.0">
           <children>
-            <VBox layoutX="-6.0" layoutY="-47.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <children>
-                <Label alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Project" textAlignment="CENTER" wrapText="false">
-                  <font>
-                    <Font size="18.0" fx:id="x1" />
-                  </font>
-                  <textFill>
-                    <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
-                  </textFill>
-                </Label>
-                <Label text="Vessel" />
-                <Label text="Client" />
-              </children>
-            </VBox>
+                  <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#showProjectInfo" prefHeight="547.0" prefWidth="10.0" text="&gt;" HBox.hgrow="ALWAYS" />
+                  <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0">
+                    <children>
+                      <Label alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Project" textAlignment="CENTER" wrapText="false">
+                        <font>
+                          <Font size="18.0" fx:id="x1" />
+                        </font>
+                        <textFill>
+                          <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
+                        </textFill>
+                      </Label>
+                      <Label text="Vessel" />
+                      <Label text="Client" />
+                    </children>
+                  </VBox>
+                     </children>
+                  </HBox>
           </children>
         </AnchorPane>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="-1.0" prefWidth="-1.0">
@@ -146,8 +152,51 @@
                                     <children>
                                       <VBox prefHeight="334.0" prefWidth="460.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                         <children>
-                                          <ListView prefHeight="121.0" prefWidth="460.0" />
-                                          <GridPane hgap="10.0" prefHeight="187.0" prefWidth="480.0" vgap="10.0">
+                                          <TableView fx:id="ProjectsTable" prefHeight="200.0" prefWidth="200.0">
+                                            <columns>
+                                              <TableColumn prefWidth="75.0" text="id">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="id" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Project Name">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="projectName" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Client">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="client" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Type">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="type" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Project Number">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="jobNumber" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Vessel Name">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="vessel" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Area">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="area" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                              <TableColumn prefWidth="75.0" text="Status">
+                                                <cellValueFactory>
+                                                  <PropertyValueFactory property="status" />
+                                                </cellValueFactory>
+                                              </TableColumn>
+                                            </columns>
+                                          </TableView>
+                                          <GridPane hgap="10.0" prefHeight="250.0" prefWidth="916.0" vgap="10.0">
                                             <columnConstraints>
                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -159,17 +208,20 @@
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                              <TextField fx:id="Status" onKeyTyped="#checkProjectFields" promptText="Status" text="active" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                              <TextField fx:id="JobNumber" onKeyTyped="#checkProjectFields" promptText="Job Nymber" text="432" GridPane.rowIndex="4" />
-                                              <TextField fx:id="Client" onAction="#checkProjectFields" onKeyTyped="#checkProjectFields" promptText="Client" text="TP" GridPane.rowIndex="2" />
-                                              <TextField fx:id="Area" onKeyTyped="#checkProjectFields" promptText="Area" text="Cyprus" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                              <TextField fx:id="Vesselname" onKeyTyped="#checkProjectFields" promptText="Vessel Name" text="Barbaros" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                              <TextField fx:id="Type" onAction="#checkProjectFields" onKeyTyped="#checkProjectFields" promptText="Type" text="3D" GridPane.rowIndex="3" />
-                                              <TextField fx:id="Projectname" onKeyTyped="#checkProjectFields" promptText="Project Name" text="Lefcosa" GridPane.rowIndex="1" />
-                                              <Button fx:id="addProject" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProjectButton" text="Add" GridPane.rowIndex="5" />
-                                              <Button fx:id="removeProject" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteProjectButton" text="Remove" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                              <TextField fx:id="Status" onKeyTyped="#checkProjectFields" promptText="Status" GridPane.rowIndex="7" />
+                                              <TextField fx:id="JobNumber" onKeyTyped="#checkProjectFields" promptText="Job Nymber" GridPane.rowIndex="4" />
+                                              <TextField fx:id="Client" onAction="#checkProjectFields" onKeyTyped="#checkProjectFields" promptText="Client" GridPane.rowIndex="2" />
+                                              <TextField fx:id="Area" onKeyTyped="#checkProjectFields" promptText="Area" GridPane.rowIndex="6" />
+                                              <TextField fx:id="Vesselname" onKeyTyped="#checkProjectFields" promptText="Vessel Name" GridPane.rowIndex="5" />
+                                              <TextField fx:id="Type" onAction="#checkProjectFields" onKeyTyped="#checkProjectFields" promptText="Type" GridPane.rowIndex="3" />
+                                              <TextField fx:id="Projectname" onKeyTyped="#checkProjectFields" promptText="Project Name" GridPane.rowIndex="1" />
+                                              <Button fx:id="addProject" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProjectButton" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                              <Button fx:id="removeProject" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteProjectButton" text="Remove" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                             </children>
                                           </GridPane>
                                         </children>
@@ -200,7 +252,7 @@
                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                           </padding>
                           <children>
-                                          <VBox layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                            <VBox layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                           </children>
                         </AnchorPane>
                       </content>
@@ -211,17 +263,22 @@
             </AnchorPane>
           </content>
         </ScrollPane>
-        <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
+        <AnchorPane fx:id="spreadView" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
           <children>
-            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <children>
-                <Canvas fx:id="spread" height="536.0" width="200.0" VBox.vgrow="ALWAYS">
-                  <cursor>
-                    <Cursor fx:constant="CROSSHAIR" />
-                  </cursor>
-                </Canvas>
-              </children>
-            </VBox>
+                  <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#showSpreadView" prefHeight="532.0" prefWidth="40.0" text="&lt;" HBox.hgrow="ALWAYS" />
+                  <VBox>
+                    <children>
+                      <Canvas fx:id="spread" height="536.0" width="200.0" VBox.vgrow="ALWAYS">
+                        <cursor>
+                          <Cursor fx:constant="CROSSHAIR" />
+                        </cursor>
+                      </Canvas>
+                    </children>
+                  </VBox>
+                     </children>
+                  </HBox>
           </children>
         </AnchorPane>
       </items>

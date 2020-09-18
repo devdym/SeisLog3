@@ -6,130 +6,127 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="676.0" prefWidth="1204.0" spacing="10" stylesheets="@../general/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ballasting.ballasting_Controller">
-  <children>
-    <SplitPane dividerPositions="0.6351263771872975" orientation="VERTICAL" prefHeight="441.0" prefWidth="497.0" VBox.vgrow="ALWAYS">
-      <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <children>
-                <VBox spacing="10.0" HBox.hgrow="NEVER">
-                  <children>
-                    <ToggleButton fx:id="minButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#updateData" prefWidth="100.0" text="Min">
-                                 <toggleGroup>
-                        <ToggleGroup fx:id="myToggleGroup" />
-                                 </toggleGroup></ToggleButton>
+<VBox prefHeight="676.0" prefWidth="1204.0" spacing="10" stylesheets="@../general/style.css"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.ballasting.ballasting_Controller">
+  <SplitPane dividerPositions="0.6351263771872975" orientation="VERTICAL" prefHeight="441.0" prefWidth="497.0"
+             VBox.vgrow="ALWAYS">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0"
+            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox spacing="10.0" HBox.hgrow="NEVER">
+          <padding>
+            <Insets bottom="10.0" left="10.0" top="10.0"/>
+          </padding>
+          <ToggleButton fx:id="minButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#updateData"
+                        prefWidth="100.0" text="Min">
+            <toggleGroup>
+              <ToggleGroup fx:id="myToggleGroup"/>
+            </toggleGroup>
+          </ToggleButton>
 
-                    <ToggleButton fx:id="avgsButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#updateData" prefWidth="100.0" selected="true" text="AVG" toggleGroup="$myToggleGroup" />
-                    <ToggleButton fx:id="maxButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#updateData" prefWidth="100.0" text="Max" toggleGroup="$myToggleGroup" />
-                              <ToggleButton fx:id="errorsButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#update" prefWidth="100.0" text="Errors only" />
-                              <Label text="min wing angle">
-                                 <padding>
-                                    <Insets top="20.0" />
-                                 </padding></Label>
-                              <Spinner fx:id="minWA" prefWidth="100.0" />
-                              <Label text="max wing angle" />
-                              <Spinner fx:id="maxWA" prefWidth="100.0" />
-                              <Label text="Skip units at front" />
-                              <Spinner fx:id="skipHead" prefWidth="100.0" />
-                              <Label text="Skip units at tail" />
-                              <Spinner fx:id="skipTail" prefWidth="100.0" />
-                  </children>
-                  <padding>
-                    <Insets bottom="10.0" left="10.0" top="10.0" />
-                  </padding>
-                </VBox>
-                        <VBox prefHeight="425.0" prefWidth="740.0" HBox.hgrow="NEVER">
-                           <children>
-                      <TreeTableView fx:id="BallTable" showRoot="false" VBox.vgrow="ALWAYS">
-                        <columns>
-                          <TreeTableColumn prefWidth="70.0" text="Streamer">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="Streamer" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn prefWidth="60.0" text="Unit">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="Unit" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq1" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq1_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq2" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq2_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq3" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq3_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq4" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq4_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq5" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq5_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq6" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq6_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq7" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq7_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq8" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq8_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq9" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq9_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                          <TreeTableColumn fx:id="ballColumnSeq10" prefWidth="60.0" text="Seq">
-                            <cellValueFactory>
-                              <TreeItemPropertyValueFactory property="seq10_mean" />
-                            </cellValueFactory>
-                          </TreeTableColumn>
-                        </columns>
-                      </TreeTableView>
-                           </children>
-                        </VBox>
-                <VBox prefHeight="425.0" prefWidth="219.0" HBox.hgrow="ALWAYS">
-                  <children>
-                    <TextArea prefHeight="425.0" prefWidth="301.0" text="stats" VBox.vgrow="ALWAYS" />
-                  </children>
-                </VBox>
-              </children>
-            </HBox>
-          </children>
-        </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-          <children>
-            <LineChart fx:id="BallastingLC" animated="false" createSymbols="false" legendSide="LEFT" prefHeight="179.0" prefWidth="495.0" title="Bird wing angle" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <xAxis>
-                <NumberAxis fx:id="yAxis" side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis autoRanging="false" lowerBound="-15.0" side="LEFT" upperBound="15.0" fx:id="xAxis" />
-              </yAxis>
-            </LineChart>
-          </children>
-        </AnchorPane>
-      </items>
-    </SplitPane>
-  </children>
+          <ToggleButton fx:id="avgsButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#updateData"
+                        prefWidth="100.0" selected="true" text="AVG" toggleGroup="$myToggleGroup"/>
+          <ToggleButton fx:id="maxButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#updateData"
+                        prefWidth="100.0" text="Max" toggleGroup="$myToggleGroup"/>
+          <ToggleButton fx:id="errorsButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#update"
+                        prefWidth="100.0" text="Errors only"/>
+          <Label text="min wing angle">
+            <padding>
+              <Insets top="20.0"/>
+            </padding>
+          </Label>
+          <Spinner fx:id="minWA" prefWidth="100.0"/>
+          <Label text="max wing angle"/>
+          <Spinner fx:id="maxWA" prefWidth="100.0"/>
+          <Label text="Skip units at front"/>
+          <Spinner fx:id="skipHead" prefWidth="100.0"/>
+          <Label text="Skip units at tail"/>
+          <Spinner fx:id="skipTail" prefWidth="100.0"/>
+        </VBox>
+        <VBox prefHeight="425.0" prefWidth="740.0" HBox.hgrow="NEVER">
+          <TreeTableView fx:id="BallTable" showRoot="false" VBox.vgrow="ALWAYS">
+            <columns>
+              <TreeTableColumn prefWidth="70.0" text="Streamer">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="Streamer"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn prefWidth="60.0" text="Unit">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="Unit"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq1" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq1_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq2" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq2_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq3" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq3_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq4" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq4_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq5" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq5_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq6" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq6_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq7" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq7_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq8" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq8_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq9" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq9_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+              <TreeTableColumn fx:id="ballColumnSeq10" prefWidth="60.0" text="Seq">
+                <cellValueFactory>
+                  <TreeItemPropertyValueFactory property="seq10_mean"/>
+                </cellValueFactory>
+              </TreeTableColumn>
+            </columns>
+          </TreeTableView>
+        </VBox>
+        <VBox prefHeight="425.0" prefWidth="219.0" HBox.hgrow="ALWAYS">
+          <TextArea prefHeight="425.0" prefWidth="301.0" text="stats" VBox.vgrow="ALWAYS"/>
+        </VBox>
+      </HBox>
+    </AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+      <LineChart fx:id="BallastingLC" animated="false" createSymbols="false" legendSide="LEFT" prefHeight="179.0"
+                 prefWidth="495.0" title="Bird wing angle" verticalGridLinesVisible="false"
+                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                 AnchorPane.topAnchor="0.0">
+        <xAxis>
+          <NumberAxis fx:id="yAxis" side="BOTTOM"/>
+        </xAxis>
+        <yAxis>
+          <NumberAxis autoRanging="false" lowerBound="-15.0" side="LEFT" upperBound="15.0" fx:id="xAxis"/>
+        </yAxis>
+      </LineChart>
+    </AnchorPane>
+  </SplitPane>
 </VBox>

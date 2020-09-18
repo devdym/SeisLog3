@@ -19,6 +19,6 @@ public class StoreData {
         session.save(pr);
         tr.commit();
         logger.warn("New Project Successfully inserted");
-        sessFact.close();
+        session.close();
     }
 }

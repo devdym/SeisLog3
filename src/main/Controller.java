@@ -1,18 +1,20 @@
 package main;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.ballasting.ballasting_Controller;
 import main.entities.Projects;
+import main.general.DeleteData;
 import main.general.PropertiesWorker;
 import main.general.ReadData;
 import main.general.StoreData;
@@ -24,11 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO Dashboard tab with stats
-//TODO Streamer tension
-//TODO TapeLog
 //TODO WEB to GunLink
 //TODO add more logging
 //TODO unit test
+//TODO Streamer Tension
+//TODO TapeLog
 
 public class Controller {
 
@@ -53,12 +55,16 @@ public class Controller {
     @FXML private TextField Vesselname;
     @FXML private TextField JobNumber;
     @FXML private Button addProject;
-    @FXML private Button removeProject;
     @FXML private Canvas spread;
+    @FXML public TableView<Projects> ProjectsTable;
+    @FXML private AnchorPane projectInfo;
+    @FXML private AnchorPane spreadView;
     @FXML WebView webView;
     private WebEngine webEngine;
 
     public static List<LocalDate> InsTestDates = new ArrayList<>();
+    public static List<Projects> projects = new ArrayList<>();
+    long selectedProject = 0;
 
     @FXML public void initialize(){
         logger.warn("Entering application.");
@@ -89,6 +95,13 @@ public class Controller {
             }
         });
 
+        ProjectsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedProject = newValue.getId();
+            }
+        });
+
+
         GraphicsContext gc = spread.getGraphicsContext2D();
         drawStreamers(gc);
 //        drawCoordinates(gc);
@@ -97,9 +110,19 @@ public class Controller {
 //        try {
 //            webEngine.load("10.103.1.30");
 //        } catch (Exception e) {
-//            System.out.println("Url Problem:" + e.getCause().getMessage());
 //            e.printStackTrace();
 //        }
+
+        update();
+    }
+
+    public void update(){
+        Platform.runLater(() -> {
+            projects = ReadData.getAllProjects();
+            //fill limits table
+            final ObservableList<Projects> data = FXCollections.observableArrayList(projects);
+            ProjectsTable.setItems(data);
+        });
     }
 
     private void drawStreamers(GraphicsContext gc) {
@@ -187,10 +210,20 @@ public class Controller {
         Type.clear();
         Status.clear();
         Vesselname.clear();
+        update();
+    }
+
+    @FXML public void showProjectInfo(){
+        projectInfo.setPrefWidth(100);
+    }
+    @FXML public void showSpreadView(){
+        spreadView.setPrefWidth(100);
     }
 
     @FXML public void deleteProjectButton(){
-        logger.warn("delete");
+        logger.warn("delete " + selectedProject);
+        DeleteData.deleteProject(selectedProject);
+        update();
     }
 
     @FXML public void checkProjectFields(){

@@ -1,7 +1,6 @@
 package main.battery;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.CategoryAxis;
@@ -15,6 +14,7 @@ import main.general.ReadData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class battery_Controller {
@@ -22,19 +22,19 @@ public class battery_Controller {
     @FXML public DatePicker BatteriesDate;
     @FXML public Spinner<Double> minBankA;
     @FXML public Spinner<Double> minBankB;
-    @FXML public TreeTableView BattTable;
+    @FXML public TreeTableView<Batteries> ResultTable;
     @FXML public TreeTableColumn<Batteries, Number> bankAColumn;
     @FXML public TreeTableColumn<Batteries, Number> bankBColumn;
-    @FXML public LineChart SpreadLC;
+    @FXML public LineChart<String, Double> BatteriesGraph;
     @FXML public CategoryAxis xAxisDate;
     @FXML public NumberAxis yAxisVolts;
 
-    private final TreeItem<Batteries> rootB = new TreeItem<>();
+    private final TreeItem<Batteries> root = new TreeItem<>();
     private List<LocalDate> BattDates = new ArrayList<>();
     private int str = 0;
 
     public void initialize() {
-        BattTable.setRoot(rootB);
+        ResultTable.setRoot(root);
 
         errorsButton.setSelected(true);
         // Value factory.
@@ -80,8 +80,8 @@ public class battery_Controller {
         BatteriesDate.setOnAction(event -> update());
 
         // table select listener
-        BattTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener<TreeItem<Batteries>>)
-                (observable, oldValue, newValue) -> drawBattGraph(newValue.getValue()));
+        ResultTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+                drawBattGraph(newValue.getValue()));
 
         // color code for bankA column
         bankAColumn.setCellFactory((TreeTableColumn<Batteries, Number> param) -> {
@@ -96,9 +96,6 @@ public class battery_Controller {
                         ttr.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() > 4.2
                                 ? ""
@@ -121,9 +118,6 @@ public class battery_Controller {
                         ttr.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() > 4.2
                                 ? ""
@@ -140,13 +134,11 @@ public class battery_Controller {
         Runnable getRes = () -> {
             List<Batteries> bt;
             if (errorsButton.isSelected()) {
-                System.out.println("selected");
                 minBankA.setDisable(false);
                 minBankB.setDisable(false);
-                bt = ReadData.getErrBatt(date, (Double) minBankA.getValue(), (Double) minBankB.getValue());
+                bt = ReadData.getErrBatt(date, minBankA.getValue(), minBankB.getValue());
                 fillTable(bt);
             }else {
-                System.out.println("NOT selected");
                 bt = ReadData.getAllBatt(date);
                 fillTable(bt);
                 minBankA.setDisable(true);
@@ -158,7 +150,7 @@ public class battery_Controller {
 
     private void fillTable(List<Batteries> bt){
         //clear table
-        rootB.getChildren().clear();
+        root.getChildren().clear();
 
         bt.stream().forEach((Result)-> {
             if(Result.getStreamerNumber() != str){
@@ -181,9 +173,9 @@ public class battery_Controller {
                                     Result.getBankB(),
                                     Result.getActiveBank())));
                 str++;
-                rootB.getChildren().add(strN);
+                root.getChildren().add(strN);
             } else {
-                TreeItem t = rootB.getChildren().get(str-1);
+                TreeItem<Batteries> t = root.getChildren().get(str-1);
                 t.getChildren().add(
                         new TreeItem<>(
                                 new Batteries(
@@ -199,28 +191,25 @@ public class battery_Controller {
     }
 
     public void drawBattGraph(Batteries unit) {
-        System.out.println("ShowBattGraph selected");
-
         Platform.runLater(() -> {
             String selected = unit.getUnitName();
-
             List<Batteries> sp = ReadData.readBattDataForGraph(selected);
 
             ObservableList<XYChart.Series<String, Double>> series = observableArrayList();
-            series.retainAll();
-            XYChart.Series aSeries = new XYChart.Series();
-            XYChart.Series bSeries = new XYChart.Series();
-
-            for (Batteries batteries : sp) {
-                aSeries.getData().add(new XYChart.Data(batteries.getDate_().toString(), batteries.getBankA()));
-                bSeries.getData().add(new XYChart.Data(batteries.getDate_().toString(), batteries.getBankB()));
-            }
+            series.clear();
+            XYChart.Series<String, Double> aSeries = new XYChart.Series<>();
+            XYChart.Series<String, Double> bSeries = new XYChart.Series<>();
             aSeries.setName("Bank A");
             bSeries.setName("Bank B");
+
+            for (Batteries batteries : sp) {
+                aSeries.getData().add(new XYChart.Data<>(batteries.getDate_().toString(), batteries.getBankA()));
+                bSeries.getData().add(new XYChart.Data<>(batteries.getDate_().toString(), batteries.getBankB()));
+            }
             series.addAll(aSeries, bSeries);
 
-            SpreadLC.getData().retainAll();
-            SpreadLC.getData().addAll(series);
+            BatteriesGraph.getData().clear();
+            BatteriesGraph.getData().addAll(series);
         });
     }
 

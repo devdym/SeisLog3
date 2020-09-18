@@ -1,0 +1,277 @@
+@startuml
+
+title __ENTITIES's Class Diagram__\n
+
+  namespace  {
+    namespace ain {
+      namespace entities {
+        class main.entities.Ballasting {
+            - compass : int
+            - id : long
+            - lineName : String
+            - max : double
+            - mean : double
+            - min : double
+            - name : String
+            - obs : int
+            - rej : int
+            - sd : double
+            - seq : int
+            - streamer : int
+            + Ballasting()
+            + Ballasting()
+            + getCompass()
+            + getId()
+            + getLineName()
+            + getMax()
+            + getMean()
+            + getMin()
+            + getName()
+            + getObs()
+            + getProjects()
+            + getRej()
+            + getSd()
+            + getSeq()
+            + getStreamer()
+            + setCompass()
+            + setId()
+            + setLineName()
+            + setMax()
+            + setMean()
+            + setMin()
+            + setName()
+            + setObs()
+            + setProjects()
+            + setRej()
+            + setSd()
+            + setSeq()
+            + setStreamer()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace ain {
+      namespace entities {
+        class main.entities.Batteries {
+            - activeBank : String
+            - bankA : double
+            - bankB : double
+            - date_ : LocalDate
+            - id : Long
+            - streamerNumber : int
+            - unit : String
+            - unitName : String
+            - unitNumber : int
+            + Batteries()
+            + Batteries()
+            + Batteries()
+            + getActiveBank()
+            + getBankA()
+            + getBankB()
+            + getDate_()
+            + getId()
+            + getProjects()
+            + getStreamerNumber()
+            + getUnit()
+            + getUnitName()
+            + getUnitNumber()
+            + setActiveBank()
+            + setBankA()
+            + setBankB()
+            + setDate_()
+            + setId()
+            + setProjects()
+            + setStreamerNumber()
+            + setUnit()
+            + setUnitName()
+            + setUnitNumber()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace ain {
+      namespace entities {
+        class main.entities.ImportLog {
+            - file : String
+            - id : long
+            + ImportLog()
+            + ImportLog()
+            + getFile()
+            + getId()
+            + getProjects()
+            + setFile()
+            + setId()
+            + setProjects()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace ain {
+      namespace entities {
+        class main.entities.InsTestLimits {
+            - cap_max : double
+            - cap_min : double
+            - cutoff_max : double
+            - cutoff_min : double
+            - id : long
+            - leakage : double
+            - noise : double
+            - sensor_nb : int
+            - updated : LocalDate
+            + InsTestLimits()
+            + InsTestLimits()
+            + getCap_max()
+            + getCap_min()
+            + getCutoff_max()
+            + getCutoff_min()
+            + getId()
+            + getLeakage()
+            + getNoise()
+            + getProjects()
+            + getSensor_nb()
+            + getUpdated()
+            + setCap_max()
+            + setCap_min()
+            + setCutoff_max()
+            + setCutoff_min()
+            + setId()
+            + setLeakage()
+            + setNoise()
+            + setProjects()
+            + setSensor_nb()
+            + setUpdated()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace ain {
+      namespace entities {
+        class main.entities.InsTestRes {
+            - ass_sn : int
+            - cap : double
+            - ch_nb : Integer
+            - cutoff : double
+            - failure : String
+            - fdu_sn : int
+            - id : long
+            - leakage : double
+            - noise : double
+            - section_rank : Integer
+            - streamer : int
+            - trace : int
+            - type : int
+            - updated : LocalDate
+            + InsTestRes()
+            + InsTestRes()
+            + InsTestRes()
+            + getAss_sn()
+            + getCap()
+            + getCh_nb()
+            + getCutoff()
+            + getFailure()
+            + getFdu_sn()
+            + getId()
+            + getLeakage()
+            + getNoise()
+            + getProjects()
+            + getSection_rank()
+            + getStreamer()
+            + getTrace()
+            + getType()
+            + getUpdated()
+            + setAss_sn()
+            + setCap()
+            + setCh_nb()
+            + setCutoff()
+            + setFailure()
+            + setFdu_sn()
+            + setId()
+            + setLeakage()
+            + setNoise()
+            + setProjects()
+            + setSection_rank()
+            + setStreamer()
+            + setTrace()
+            + setType()
+            + setUpdated()
+        }
+      }
+    }
+  }
+  
+
+  namespace  {
+    namespace ain {
+      namespace entities {
+        class main.entities.Projects {
+            - area : String
+            - ballasting : List<Ballasting>
+            - batteries : List<Batteries>
+            - client : String
+            - id : long
+            - importLog : List<ImportLog>
+            - insTestLimits : List<InsTestLimits>
+            - insTestRes : List<InsTestRes>
+            - jobNumber : String
+            - projectName : String
+            - status : String
+            - type : String
+            - vessel : String
+            + Projects()
+            + Projects()
+            + getArea()
+            + getBallasting()
+            + getClient()
+            + getId()
+            + getJobNumber()
+            + getProjectName()
+            + getStatus()
+            + getType()
+            + getVessel()
+            + setArea()
+            + setBallasting()
+            + setClient()
+            + setId()
+            + setJobNumber()
+            + setProjectName()
+            + setStatus()
+            + setType()
+            + setVessel()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  main.entities.Ballasting o-- main.entities.Projects : projects
+  main.entities.Batteries o-- main.entities.Projects : projects
+  main.entities.ImportLog o-- main.entities.Projects : projects
+  main.entities.InsTestLimits o-- main.entities.Projects : projects
+  main.entities.InsTestRes o-- main.entities.Projects : projects
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

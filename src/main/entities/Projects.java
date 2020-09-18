@@ -45,6 +45,17 @@ public class Projects {
     public Projects() {
     }
 
+    public Projects(long id, String projectName, String area, String client, String jobNumber, String type, String status, String vessel) {
+        this.id = id;
+        this.projectName = projectName;
+        this.area = area;
+        this.client = client;
+        this.jobNumber = jobNumber;
+        this.type = type;
+        this.status = status;
+        this.vessel = vessel;
+    }
+
     public Projects(String projectName, String area, String client, String jobNumber, String type, String status, String vessel) {
         this.projectName = projectName;
         this.area = area;

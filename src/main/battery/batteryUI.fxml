@@ -42,7 +42,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </VBox>
-                        <TreeTableView fx:id="BattTable" prefHeight="426.0" prefWidth="484.0" showRoot="false">
+                        <TreeTableView fx:id="ResultTable" prefHeight="426.0" prefWidth="484.0" showRoot="false">
                           <columns>
                               <TreeTableColumn prefWidth="75.0" text="Streamer">
                                   <cellValueFactory>
@@ -83,7 +83,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <LineChart fx:id="SpreadLC" animated="false" createSymbols="false" legendSide="LEFT" prefHeight="179.0" prefWidth="495.0" title="DigiBird Battery Voltage" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <LineChart fx:id="BatteriesGraph" animated="false" createSymbols="false" legendSide="LEFT" prefHeight="179.0" prefWidth="495.0" title="DigiBird Battery Voltage" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <xAxis>
                       <CategoryAxis label="Date" side="BOTTOM" fx:id="xAxisDate" />
                     </xAxis>

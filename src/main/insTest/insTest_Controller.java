@@ -56,18 +56,18 @@ public class insTest_Controller {
     @FXML public ToggleButton errorsButton;
     @FXML public TableView<InsTestLimits> LimitsTable;
     @FXML public TableView<resultTable> resultsTable;
-    @FXML public BarChart<Number, Number> CapHistogram;
-    @FXML public BarChart<Number, Number> CutoffHistogram;
+    @FXML public BarChart<String, Number> CapHistogram;
+    @FXML public BarChart<String, Number> CutoffHistogram;
 
     private final TreeItem<InsTestRes> root = new TreeItem<>();
     private List<LocalDate> InsTestDates = new ArrayList<>();
-    private int str = 0;
+    private int streamer = 0;
     DecimalFormat DecFormatOneOne = new DecimalFormat("#.#");
     List<InsTestLimits> CalculatedLimits = new ArrayList<>();
+    List<InsTestLimits> limits = new ArrayList<>();
+    List<InsTestRes> testResults = new ArrayList<>();
 
     public void initialize() {
-        //TODO Select last date
-
         //Control pane
         InsTestDates = ReadData.getInsTestDates();
 
@@ -105,38 +105,250 @@ public class insTest_Controller {
         CapColumn.setCellFactory((TreeTableColumn<InsTestRes, Number> param) -> {
             TreeTableCell<InsTestRes, Number> cell = new TreeTableCell<>(){
                 @Override
-                //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<InsTestRes> cttr = getTreeTableRow();
+                    TreeTableRow<InsTestRes> cap = getTreeTableRow();
+
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        cap.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
-                        setText(item.toString());
-                        setStyle(item.doubleValue() > 219.0
-                                ? ""
-                                : "-fx-text-fill: #FF6633");
+                        if(cap.getTreeItem().getValue().getType() == 2){
+                            if(cap.getTreeItem().getValue().getCap() > limits.get(0).getCap_max() ||
+                                cap.getTreeItem().getValue().getCap() < limits.get(0).getCap_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(cap.getTreeItem().getValue().getType() == 3){
+                            if(cap.getTreeItem().getValue().getCap() > limits.get(1).getCap_max() ||
+                                    cap.getTreeItem().getValue().getCap() < limits.get(1).getCap_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(cap.getTreeItem().getValue().getType() == 4){
+                            if(cap.getTreeItem().getValue().getCap() > limits.get(2).getCap_max() ||
+                                    cap.getTreeItem().getValue().getCap() < limits.get(2).getCap_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(cap.getTreeItem().getValue().getType() == 5){
+                            if(cap.getTreeItem().getValue().getCap() > limits.get(3).getCap_max() ||
+                                    cap.getTreeItem().getValue().getCap() < limits.get(3).getCap_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                    }
+                }
+            };
+            return cell;
+        });
+        CutoffColumn.setCellFactory((TreeTableColumn<InsTestRes, Number> param) -> {
+            TreeTableCell<InsTestRes, Number> cell = new TreeTableCell<>(){
+                @Override
+                protected void updateItem(Number item, boolean empty) {
+                    super.updateItem(item, empty);
+                    TreeTableRow<InsTestRes> value = getTreeTableRow();
+                    if (item == null || empty){
+                        setText(null);
+                        value.setStyle("");
+                        setStyle("");
+                    } else {
+                        if(value.getTreeItem().getValue().getType() == 2){
+                            if(value.getTreeItem().getValue().getCutoff() > limits.get(0).getCutoff_max() ||
+                                    value.getTreeItem().getValue().getCutoff() < limits.get(0).getCutoff_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 3){
+                            if(value.getTreeItem().getValue().getCutoff() > limits.get(1).getCutoff_max() ||
+                                    value.getTreeItem().getValue().getCutoff() < limits.get(1).getCutoff_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 4){
+                            if(value.getTreeItem().getValue().getCutoff() > limits.get(2).getCutoff_max() ||
+                                    value.getTreeItem().getValue().getCap() < limits.get(2).getCutoff_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 5){
+                            if(value.getTreeItem().getValue().getCutoff() > limits.get(3).getCutoff_max() ||
+                                    value.getTreeItem().getValue().getCutoff() < limits.get(3).getCutoff_min()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                    }
+                }
+            };
+            return cell;
+        });
+        NoiseColumn.setCellFactory((TreeTableColumn<InsTestRes, Number> param) -> {
+            TreeTableCell<InsTestRes, Number> cell = new TreeTableCell<>(){
+                @Override
+                protected void updateItem(Number item, boolean empty) {
+                    super.updateItem(item, empty);
+                    TreeTableRow<InsTestRes> value = getTreeTableRow();
+                    if (item == null || empty){
+                        setText(null);
+                        value.setStyle("");
+                        setStyle("");
+                    } else {
+                        if(value.getTreeItem().getValue().getType() == 2){
+                            if(value.getTreeItem().getValue().getNoise() > limits.get(0).getNoise()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 3){
+                            if(value.getTreeItem().getValue().getNoise() > limits.get(1).getNoise()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 4){
+                            if(value.getTreeItem().getValue().getNoise() > limits.get(2).getNoise()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 5){
+                            if(value.getTreeItem().getValue().getNoise() > limits.get(3).getNoise()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                    }
+                }
+            };
+            return cell;
+        });
+        LeakageColumn.setCellFactory((TreeTableColumn<InsTestRes, Number> param) -> {
+            TreeTableCell<InsTestRes, Number> cell = new TreeTableCell<>(){
+                @Override
+                protected void updateItem(Number item, boolean empty) {
+                    super.updateItem(item, empty);
+                    TreeTableRow<InsTestRes> value = getTreeTableRow();
+                    if (item == null || empty){
+                        setText(null);
+                        value.setStyle("");
+                        setStyle("");
+                    } else {
+                        if(value.getTreeItem().getValue().getType() == 2){
+                            if(value.getTreeItem().getValue().getLeakage() < limits.get(0).getLeakage()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 3){
+                            if(value.getTreeItem().getValue().getLeakage() < limits.get(1).getLeakage()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 4){
+                            if(value.getTreeItem().getValue().getLeakage() < limits.get(2).getLeakage()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
+                        if(value.getTreeItem().getValue().getType() == 5){
+                            if(value.getTreeItem().getValue().getLeakage() < limits.get(3).getLeakage()){
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #FF6633");
+                            } else {
+                                setText(item.toString());
+                                setStyle("-fx-text-fill: #CCCCCC");
+                            }
+                        }
                     }
                 }
             };
             return cell;
         });
 
+        // Value factory.
+        SpinnerValueFactory<Integer> valueAFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 6, 1, 1);
+        StrSP.setValueFactory(valueAFactory);
+        StrSP.valueProperty().addListener(event -> updateGraph(InsTestDateDatePicker.getValue()));
+
         tS2.valueProperty().addListener((observable) -> limitsFunc());
         tS3.valueProperty().addListener((observable) -> limitsFunc());
         tS4.valueProperty().addListener((observable) -> limitsFunc());
         tS5.valueProperty().addListener((observable) -> limitsFunc());
-        tS6.valueProperty().addListener((observable) -> limitsFunc());
         dS2.valueProperty().addListener((observable) -> limitsFunc());
         dS3.valueProperty().addListener((observable) -> limitsFunc());
         dS4.valueProperty().addListener((observable) -> limitsFunc());
         dS5.valueProperty().addListener((observable) -> limitsFunc());
-        dS6.valueProperty().addListener((observable) -> limitsFunc());
+    }
+
+    private void updateGraph(LocalDate date){
+        if(CapButton.isSelected()){
+            logger.warn("cap is selected");
+            ShowCap();
+        } else if(CutButton.isSelected()){
+            logger.warn("cut is selected");
+            ShowCut();
+        } else if(LeakageButton.isSelected()){
+            ShowLeakage();
+        } else if(NoiseButton.isSelected()){
+            ShowNoise();
+        } else {
+            logger.warn("No value selected");
+        }
     }
 
     private void update(LocalDate date){
@@ -145,21 +357,23 @@ public class insTest_Controller {
 
         //populate tree table
         Platform.runLater(() -> {
-            List<InsTestLimits> lim = ReadData.getInsTestLimits(date);
+            //Get Limits for selected date
+            limits = ReadData.getInsTestLimits(date);
             //fill limits table
-            final ObservableList<InsTestLimits> data = FXCollections.observableArrayList(lim);
+            final ObservableList<InsTestLimits> data = FXCollections.observableArrayList(limits);
             LimitsTable.setItems(data);
 
-            List<InsTestRes> res = ReadData.getInsTestRes(date);
+            //Get Test Result
+            testResults = ReadData.getInsTestRes(date);
 
             if(errorsButton.isSelected()){
                 List<InsTestRes> resErrorsOnly = new ArrayList<>();
                 logger.warn("get errors only InsTest result");
 
                 // filter Cap
-                for(InsTestLimits l : lim){
+                for(InsTestLimits l : limits){
                     List<InsTestRes> capError;
-                    capError = res.stream()
+                    capError = testResults.stream()
                             .filter(c -> (c.getCap() < l.getCap_min()
                                     || l.getCap_max() < c.getCap()
                                     && c.getType() == l.getSensor_nb()))
@@ -167,9 +381,9 @@ public class insTest_Controller {
                     resErrorsOnly.addAll(capError);
                 }
                 // filter Cutoff
-                for(InsTestLimits l : lim){
+                for(InsTestLimits l : limits){
                     List<InsTestRes> cutoffError;
-                    cutoffError = res.stream()
+                    cutoffError = testResults.stream()
                             .filter(c -> (c.getCutoff() < l.getCutoff_min()
                                     || l.getCutoff_max() < c.getCutoff()
                                     && c.getType() == l.getSensor_nb()))
@@ -177,18 +391,18 @@ public class insTest_Controller {
                     resErrorsOnly.addAll(cutoffError);
                 }
                 // filter Leakage
-                for(InsTestLimits l : lim){
+                for(InsTestLimits l : limits){
                     List<InsTestRes> leakageError;
-                    leakageError = res.stream()
+                    leakageError = testResults.stream()
                             .filter(c -> (c.getLeakage() < l.getLeakage()
                                     && c.getType() == l.getSensor_nb()))
                             .collect(Collectors.toList());
                     resErrorsOnly.addAll(leakageError);
                 }
                 // filter Leakage
-                for(InsTestLimits l : lim){
+                for(InsTestLimits l : limits){
                     List<InsTestRes> noiseError;
-                    noiseError = res.stream()
+                    noiseError = testResults.stream()
                             .filter(c -> (c.getNoise() > l.getNoise()
                                     && c.getType() == l.getSensor_nb()))
                             .collect(Collectors.toList());
@@ -205,14 +419,14 @@ public class insTest_Controller {
                 getStats(listWithoutDuplicates);
             } else {
                 logger.warn("get all InsTest result");
-                fillTable(res);
+                fillTable(testResults);
             }
 
             //build histogram
             List<Double> capHist = new ArrayList<>();
             List<Double> cutoffHist = new ArrayList<>();
 
-            for(InsTestRes r : res){
+            for(InsTestRes r : testResults){
                 capHist.add(r.getCap());
                 cutoffHist.add(r.getCutoff());
             }
@@ -224,8 +438,8 @@ public class insTest_Controller {
             double capMax = capHist.stream().max(Comparator.comparing(Double::valueOf)).get();
             double cutoffMax = cutoffHist.stream().max(Comparator.comparing(Double::valueOf)).get();
 
-            XYChart.Series capSeries1 = new XYChart.Series();
-            XYChart.Series cutoffSeries1 = new XYChart.Series();
+            XYChart.Series<String, Number> capSeries1 = new XYChart.Series<>();
+            XYChart.Series<String, Number> cutoffSeries1 = new XYChart.Series<>();
 
             //bin nb
             int capbin = 10;
@@ -235,28 +449,76 @@ public class insTest_Controller {
             while(capIter < capMax){
                 capIter = capIter + capbin;
                 double i = capIter;
-                long st = res.stream().filter(c -> c.getCap() < i
+                long st = testResults.stream().filter(c -> c.getCap() < i
                         && c.getCap() < i + capbin )
                         .count();
                 String com = i + "-" + (i + capbin);
-                capSeries1.getData().add(new XYChart.Data(com, (int) st));
+                capSeries1.getData().add(new XYChart.Data<>(com, (int) st));
             }
-            CapHistogram.getData().retainAll();
+            CapHistogram.getData().clear();
             CapHistogram.getData().add(capSeries1);
 
             double cutoffIter = cutoffMin;
             while(cutoffIter < cutoffMax){
                 cutoffIter = cutoffIter + cutoffbin;
                 double i = cutoffIter;
-                long st = res.stream().filter(c -> c.getCutoff() < i
+                long st = testResults.stream().filter(c -> c.getCutoff() < i
                         && c.getCutoff() < i + cutoffbin )
                         .count();
                 String com = String.format("%.1f", i) + "-" + String.format("%.1f", i+cutoffbin);
-                cutoffSeries1.getData().add(new XYChart.Data(com, (int) st));
+                cutoffSeries1.getData().add(new XYChart.Data<>(com, (int) st));
             }
-            CutoffHistogram.getData().retainAll();
+            CutoffHistogram.getData().clear();
             CutoffHistogram.getData().add(cutoffSeries1);
         });
+    }
+
+    public void fillTable(List<InsTestRes> res){
+        streamer = 0;
+        res.stream().forEach((Result)-> {
+            if(Result.getStreamer() != streamer){
+                TreeItem<InsTestRes> strN =
+                        new TreeItem<>(
+                                new InsTestRes(
+                                        streamer +1,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0));
+                strN.setExpanded(true);
+                strN.getChildren().add(
+                        new TreeItem<>(
+                                new InsTestRes(
+                                        Result.getStreamer(),
+                                        Result.getTrace(),
+                                        Result.getType(),
+                                        Result.getAss_sn(),
+                                        Result.getCap(),
+                                        Result.getCutoff(),
+                                        Result.getNoise(),
+                                        Result.getLeakage())));
+                streamer++;
+                root.getChildren().add(strN);
+            } else {
+                TreeItem<InsTestRes> t = root.getChildren().get(streamer -1);
+                t.getChildren().add(
+                        new TreeItem<>(
+                                new InsTestRes(
+                                        Result.getStreamer(),
+                                        Result.getTrace(),
+                                        Result.getType(),
+                                        Result.getAss_sn(),
+                                        Result.getCap(),
+                                        Result.getCutoff(),
+                                        Result.getNoise(),
+                                        Result.getLeakage())));
+            }
+        });
+        streamer = 0;
+
     }
 
     public void getStats(List<InsTestRes> resErrorsOnly){
@@ -289,7 +551,6 @@ public class insTest_Controller {
         resData.add(new resultTable(6, 0, 0, 0, 0, (int)totalS6));
 
         resultsTable.setItems(resData);
-
     }
 
     //        Collections.sort(result, new Sortbystr());
@@ -303,8 +564,8 @@ public class insTest_Controller {
         CalculatedLimits.clear();
         int s = 2;
         double cap, cutoff, minCap, maxCap, minCutoff, maxCutoff, capTol, CutoffTol;
-        capTol = Double.valueOf(capTolTF.getText());
-        CutoffTol = Double.valueOf(cutTolTF.getText());
+        capTol = Double.parseDouble(capTolTF.getText());
+        CutoffTol = Double.parseDouble(cutTolTF.getText());
         List<Integer> te = new ArrayList<>();
         List<Integer> pr = new ArrayList<>();
 
@@ -312,13 +573,11 @@ public class insTest_Controller {
         te.add(tS3.getValue());
         te.add(tS4.getValue());
         te.add(tS5.getValue());
-        te.add(tS6.getValue());
 
         pr.add(dS2.getValue());
         pr.add(dS3.getValue());
         pr.add(dS4.getValue());
         pr.add(dS5.getValue());
-        pr.add(dS6.getValue());
 
         calcInfoArea.setText("");
         calcInfoArea.appendText("-- Calculated limits capacitance " + capTol + "% and cut off " + CutoffTol + "% --\n");
@@ -350,106 +609,99 @@ public class insTest_Controller {
             calcInfoArea.appendText("Noise S" + i + "\t" + noiseTF.getText() + "\n");
         }
 
-        //--------
-        s = 2;
-        for (Integer i : te) {
-            double temp = i;
-            double pressure = pr.get(te.indexOf(i));
-            capTol = Double.valueOf(capTolTF.getText());
-            CutoffTol = Double.valueOf(cutTolTF.getText());
-            pressure = pressure / 10;
-            cap = 260.0 + 1.742 * (temp - 20) - 9.230 * pressure;
-            cutoff = 1 / (0.4741 + 0.00277 * (temp - 20) - 0.0147 * pressure);
-
-            minCap = cap - (cap * capTol / 100);
-            maxCap = cap + (cap * capTol / 100);
-
-            minCutoff = cutoff - (cutoff * CutoffTol / 100);
-            maxCutoff = cutoff + (cutoff * CutoffTol / 100);
-            s++;
-        }
+//        //--------
+//        s = 2;
+//        for (Integer i : te) {
+//            double temp = i;
+//            double pressure = pr.get(te.indexOf(i));
+//            capTol = Double.parseDouble(capTolTF.getText());
+//            CutoffTol = Double.parseDouble(cutTolTF.getText());
+//            pressure = pressure / 10;
+//            cap = 260.0 + 1.742 * (temp - 20) - 9.230 * pressure;
+//            cutoff = 1 / (0.4741 + 0.00277 * (temp - 20) - 0.0147 * pressure);
+//
+//            minCap = cap - (cap * capTol / 100);
+//            maxCap = cap + (cap * capTol / 100);
+//
+//            minCutoff = cutoff - (cutoff * CutoffTol / 100);
+//            maxCutoff = cutoff + (cutoff * CutoffTol / 100);
+//            s++;
+//        }
     }
 
-    @FXML public void ShowCap(ActionEvent actionEvent) {
-        System.out.println("cap was selected");
-
+    @FXML public void ShowCap() {
         Platform.runLater(() -> {
             int SelStr = StrSP.getValue();
             LocalDate date = InsTestDateDatePicker.getValue();
             List<InsTestRes> sp = ReadData.getCapGraphData(SelStr, date);
 
             XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
-
-            for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data<>(Integer.toString(sp.get(i).getTrace()), sp.get(i).getCap()));
-            }
             aSeries.setName("Cap");
 
-            SpreadLC.getData().retainAll();
+            for (InsTestRes insTestRes : sp) {
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(insTestRes.getTrace()), insTestRes.getCap()));
+            }
+
+            SpreadLC.getData().clear();
             SpreadLC.getData().add(aSeries);
         });
     }
 
-    @FXML public void ShowCut(ActionEvent actionEvent) {
-        System.out.println("cut was selected");
-
+    @FXML public void ShowCut() {
         Platform.runLater(() -> {
-            int SelStr = (Integer)StrSP.getValue();
+            int SelStr = StrSP.getValue();
             LocalDate date = InsTestDateDatePicker.getValue();
             List<InsTestRes> sp = ReadData.getCutGraphData(SelStr, date);
 
             XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
+            aSeries.setName("cut off");
 
-            for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data<>(Integer.toString(sp.get(i).getTrace()), sp.get(i).getCutoff()));
+            for (InsTestRes insTestRes : sp) {
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(insTestRes.getTrace()), insTestRes.getCutoff()));
             }
-            aSeries.setName("cutoff");
 
-            SpreadLC.getData().retainAll();
+            SpreadLC.getData().clear();
             SpreadLC.getData().add(aSeries);
         });
-
     }
 
-    @FXML public void ShowLeakage(ActionEvent actionEvent) {
+    @FXML public void ShowLeakage() {
         Platform.runLater(() -> {
-            int SelStr = (Integer)StrSP.getValue();
+            int SelStr = StrSP.getValue();
             LocalDate date = InsTestDateDatePicker.getValue();
             List<InsTestRes> sp = ReadData.getLeakageGraphData(SelStr, date);
 
             XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
-
-            for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data<>(Integer.toString(sp.get(i).getTrace()), sp.get(i).getLeakage()));
-            }
             aSeries.setName("leakage");
 
-            SpreadLC.getData().retainAll();
+            for (InsTestRes insTestRes : sp) {
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(insTestRes.getTrace()), insTestRes.getLeakage()));
+            }
+
+            SpreadLC.getData().clear();
             SpreadLC.getData().add(aSeries);
         });
     }
 
-    @FXML public void ShowNoise(ActionEvent actionEvent) {
+    @FXML public void ShowNoise() {
         Platform.runLater(() -> {
-            int SelStr = (Integer)StrSP.getValue();
+            int SelStr = StrSP.getValue();
             LocalDate date = InsTestDateDatePicker.getValue();
             List<InsTestRes> sp = ReadData.getNoiseGraphData(SelStr, date);
 
-            XYChart.Series aSeries = new XYChart.Series();
-
-            for(int i=0; i<sp.size(); i++) {
-                aSeries.getData().add(new XYChart.Data(Integer.toString(sp.get(i).getTrace()), sp.get(i).getNoise()));
-            }
+            XYChart.Series<String, Number> aSeries = new XYChart.Series<>();
             aSeries.setName("noise");
 
-            SpreadLC.getData().retainAll();
+            for (InsTestRes insTestRes : sp) {
+                aSeries.getData().add(new XYChart.Data<>(Integer.toString(insTestRes.getTrace()), insTestRes.getNoise()));
+            }
+
+            SpreadLC.getData().clear();
             SpreadLC.getData().add(aSeries);
         });
     }
 
     public void drawChGraph(InsTestRes section) {
-        System.out.println("ShowIntGraph selected");
-
         Platform.runLater(() -> {
             int selected = section.getAss_sn();
 
@@ -462,7 +714,7 @@ public class insTest_Controller {
             List<Integer> dTrace = sectionTrace.stream().distinct().collect(Collectors.toList());
 
             ObservableList<XYChart.Series<String, Number>> series = observableArrayList();
-            series.retainAll();
+            series.clear();
             XYChart.Series<String, Number> Series1 = new XYChart.Series<>();
             XYChart.Series<String, Number> Series2 = new XYChart.Series<>();
             XYChart.Series<String, Number> Series3 = new XYChart.Series<>();
@@ -475,6 +727,18 @@ public class insTest_Controller {
             XYChart.Series<String, Number> Series10 = new XYChart.Series<>();
             XYChart.Series<String, Number> Series11 = new XYChart.Series<>();
             XYChart.Series<String, Number> Series12 = new XYChart.Series<>();
+            Series1.setName("trace 1");
+            Series2.setName("trace 2");
+            Series3.setName("trace 3");
+            Series4.setName("trace 4");
+            Series5.setName("trace 5");
+            Series6.setName("trace 6");
+            Series7.setName("trace 7");
+            Series8.setName("trace 8");
+            Series9.setName("trace 9");
+            Series10.setName("trace 10");
+            Series11.setName("trace 11");
+            Series12.setName("trace 12");
 
             for (InsTestRes instestres : sp) {
                 if(instestres.getTrace() == dTrace.get(0)){
@@ -514,72 +778,15 @@ public class insTest_Controller {
                     Series12.getData().add(new XYChart.Data<>(instestres.getUpdated().toString(), instestres.getCap()));
                 }
             }
-            Series1.setName("trace 1");
-            Series2.setName("trace 2");
-            Series3.setName("trace 3");
-            Series4.setName("trace 4");
-            Series5.setName("trace 5");
-            Series6.setName("trace 6");
-            Series7.setName("trace 7");
-            Series8.setName("trace 8");
-            Series9.setName("trace 9");
-            Series10.setName("trace 10");
-            Series11.setName("trace 11");
-            Series12.setName("trace 12");
+
             series.addAll(Series1, Series2, Series3, Series4, Series5, Series6,
                     Series7, Series8, Series9, Series10, Series11, Series12);
             yAxisIns.setLabel("Cap");
             xAxisIns.setLabel("Date");
-            SpreadLC.getData().retainAll();
+            SpreadLC.getData().clear();
             SpreadLC.getData().addAll(series);
         });
     }
 
-    public void fillTable(List<InsTestRes> res){
-        str = 0;
-        res.stream().forEach((Result)-> {
-            if(Result.getStreamer() != str){
-                TreeItem<InsTestRes> strN =
-                        new TreeItem<>(
-                                new InsTestRes(
-                                        str+1,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        0));
-//                        strN.setExpanded(true);
-                strN.getChildren().add(
-                        new TreeItem<>(
-                                new InsTestRes(
-                                        Result.getStreamer(),
-                                        Result.getTrace(),
-                                        Result.getType(),
-                                        Result.getAss_sn(),
-                                        Result.getCap(),
-                                        Result.getCutoff(),
-                                        Result.getNoise(),
-                                        Result.getLeakage())));
-                str++;
-                root.getChildren().add(strN);
-            } else {
-                TreeItem t = root.getChildren().get(str-1);
-                t.getChildren().add(
-                        new TreeItem<>(
-                                new InsTestRes(
-                                        Result.getStreamer(),
-                                        Result.getTrace(),
-                                        Result.getType(),
-                                        Result.getAss_sn(),
-                                        Result.getCap(),
-                                        Result.getCutoff(),
-                                        Result.getNoise(),
-                                        Result.getLeakage())));
-            }
-        });
-        str = 0;
 
-    }
 }

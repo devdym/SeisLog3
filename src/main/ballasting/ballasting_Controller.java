@@ -83,15 +83,12 @@ public class ballasting_Controller {
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -107,15 +104,12 @@ public class ballasting_Controller {
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -131,15 +125,12 @@ public class ballasting_Controller {
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -152,18 +143,14 @@ public class ballasting_Controller {
         ballColumnSeq4.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
             TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
                 @Override
-                //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -176,18 +163,14 @@ public class ballasting_Controller {
         ballColumnSeq5.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
             TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
                 @Override
-                //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -203,15 +186,12 @@ public class ballasting_Controller {
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -224,18 +204,14 @@ public class ballasting_Controller {
         ballColumnSeq7.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
             TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
                 @Override
-                //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -251,15 +227,12 @@ public class ballasting_Controller {
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -275,15 +248,12 @@ public class ballasting_Controller {
                 //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -296,18 +266,14 @@ public class ballasting_Controller {
         ballColumnSeq10.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
             TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
                 @Override
-                //by using Number we don't have to parse a String
                 protected void updateItem(Number item, boolean empty) {
                     super.updateItem(item, empty);
-                    TreeTableRow<SeqData> cttr = getTreeTableRow();
+                    TreeTableRow<SeqData> seq = getTreeTableRow();
                     if (item == null || empty){
                         setText(null);
-                        cttr.setStyle("");
+                        seq.setStyle("");
                         setStyle("");
                     } else {
-//                        ttr.setStyle(item.doubleValue() > 4.2
-//                                ? "-fx-background-color:lightgreen"
-//                                : "-fx-background-color:pink");
                         setText(item.toString());
                         setStyle(item.doubleValue() < 5.0
                                 ? ""
@@ -324,11 +290,10 @@ public class ballasting_Controller {
 
     public void drawChGraph(SeqData unit) {
         Platform.runLater(() -> {
-
-            List<Ballasting> sp = ReadData.getBallastinDataForGraph(unit);
+            List<Ballasting> sp = ReadData.getBallastingDataForGraph(unit);
 
             ObservableList<XYChart.Series<Number, Number>> series = observableArrayList();
-            series.retainAll();
+            series.clear();
             XYChart.Series<Number, Number> Series1 = new XYChart.Series<>();
             XYChart.Series<Number, Number> Series2 = new XYChart.Series<>();
             XYChart.Series<Number, Number> Series3 = new XYChart.Series<>();
@@ -345,7 +310,7 @@ public class ballasting_Controller {
             series.addAll(Series1, Series2, Series3);
             xAxis.setLabel("value");
             yAxis.setLabel("seq");
-            BallastingLC.getData().retainAll();
+            BallastingLC.getData().clear();
             BallastingLC.getData().addAll(series);
         });
     }
@@ -455,43 +420,43 @@ public class ballasting_Controller {
                 double s1max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(0))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s2max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(1))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s3max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(2))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s4max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(3))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s5max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(4))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s6max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(5))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s7max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(6))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s8max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(7))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s9max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(8))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
                 double s10max = last_seq_data
                         .stream()
                         .filter(c -> c.getStreamer() == st && c.getCompass() == u && c.getSeq() == seq.get(9))
-                        .collect(Collectors.toList()).get(0).getMin();
+                        .collect(Collectors.toList()).get(0).getMax();
 
                 tenSeqMax.add(new SeqData(st, u, s1max, s2max, s3max, s4max, s5max, s6max, s7max, s8max, s9max, s10max));
             }
@@ -563,10 +528,10 @@ public class ballasting_Controller {
     public void fillTable(List<SeqData> tenSeq){
         Platform.runLater(() -> {
             root.getChildren().clear();
-            tenSeq.stream().forEach((Result)-> {
-                if(Result.getStreamer() != str){
+            for (SeqData Result : tenSeq) {
+                if (Result.getStreamer() != str) {
                     TreeItem<SeqData> strN = new TreeItem<>(
-                            new SeqData(str+1,
+                            new SeqData(str + 1,
                                     0,
                                     0,
                                     0,
@@ -595,7 +560,7 @@ public class ballasting_Controller {
                     str++;
                     root.getChildren().add(strN);
                 } else {
-                    TreeItem t = root.getChildren().get(str-1);
+                    TreeItem<SeqData> t = root.getChildren().get(str - 1);
                     t.getChildren().add(new TreeItem<>(
                             new SeqData(Result.getStreamer(),
                                     Result.getUnit(),
@@ -610,7 +575,7 @@ public class ballasting_Controller {
                                     Result.getSeq9_mean(),
                                     Result.getSeq10_mean())));
                 }
-            });
+            }
             str = 0;
 
         });
