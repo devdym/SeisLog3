@@ -18,6 +18,7 @@ import main.general.DeleteData;
 import main.general.PropertiesWorker;
 import main.general.ReadData;
 import main.general.StoreData;
+import main.tension.tension_Controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +30,6 @@ import java.util.List;
 //TODO WEB to GunLink
 //TODO add more logging
 //TODO unit test
-//TODO Streamer Tension
 //TODO TapeLog
 
 public class Controller {
@@ -44,6 +44,7 @@ public class Controller {
     @FXML private Tab InsTestPane;
     @FXML private Tab BatteryPane;
     @FXML private Tab BallastingPane;
+    @FXML private Tab TensionPane;
     @FXML private TextField IPAddress;
     @FXML private TextField UserName;
     @FXML private TextField Password;
@@ -55,6 +56,8 @@ public class Controller {
     @FXML private TextField Vesselname;
     @FXML private TextField JobNumber;
     @FXML private Button addProject;
+    @FXML private Button showSpreadBT;
+    @FXML private Button showProjectBT;
     @FXML private Canvas spread;
     @FXML public TableView<Projects> ProjectsTable;
     @FXML private AnchorPane projectInfo;
@@ -68,6 +71,9 @@ public class Controller {
 
     @FXML public void initialize(){
         logger.warn("Entering application.");
+
+        projectInfo.setPrefWidth(20);
+        spreadView.setPrefWidth(20);
 
         Runnable readPref = () -> {
             PropertiesWorker.ReadPreferences();
@@ -89,6 +95,9 @@ public class Controller {
             } else if(newValue == BallastingPane) {
                 logger.warn("ballasting tab selected");
                 ballasting_Controller.doBallasting();
+            } else if(newValue == TensionPane) {
+                logger.warn("tension tab selected");
+                tension_Controller.getTensionData();
             }
             else {
                 logger.warn("other tab");
@@ -214,10 +223,22 @@ public class Controller {
     }
 
     @FXML public void showProjectInfo(){
-        projectInfo.setPrefWidth(100);
+        if(projectInfo.widthProperty().getValue() == 100){
+            showProjectBT.setText(">");
+            projectInfo.setPrefWidth(20);
+        } else {
+            projectInfo.setPrefWidth(100);
+            showProjectBT.setText("<");
+        }
     }
     @FXML public void showSpreadView(){
-        spreadView.setPrefWidth(100);
+        if(spreadView.widthProperty().getValue() == 200){
+            showSpreadBT.setText("<");
+            spreadView.setPrefWidth(20);
+        } else {
+            spreadView.setPrefWidth(200);
+            showSpreadBT.setText(">");
+        }
     }
 
     @FXML public void deleteProjectButton(){

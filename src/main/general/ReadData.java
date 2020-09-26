@@ -272,4 +272,21 @@ public class ReadData {
         return sp;
     }
 
+    // Tension tab
+
+    public static List<Tension> getTension(LocalDate current_date, LocalDate until_date){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        Query<Tension> query = session.createQuery("FROM Tension WHERE date_ between :until_date and :current_date ORDER BY date_",
+                Tension.class);
+        query.setParameter("current_date", current_date);
+        query.setParameter("until_date", until_date);
+        List<Tension> result = query.getResultList();
+        transaction.commit();
+        session.close();
+        return result;
+
+    }
 }

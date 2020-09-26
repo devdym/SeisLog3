@@ -44,27 +44,23 @@
     </MenuBar>
     <SplitPane dividerPositions="0.06513026052104208, 0.7965931863727455" focusTraversable="true" prefHeight="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane fx:id="projectInfo" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="70.0">
+        <AnchorPane fx:id="projectInfo" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
           <children>
-                  <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#showProjectInfo" prefHeight="547.0" prefWidth="10.0" text="&gt;" HBox.hgrow="ALWAYS" />
-                  <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0">
-                    <children>
-                      <Label alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Project" textAlignment="CENTER" wrapText="false">
-                        <font>
-                          <Font size="18.0" fx:id="x1" />
-                        </font>
-                        <textFill>
-                          <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
-                        </textFill>
-                      </Label>
-                      <Label text="Vessel" />
-                      <Label text="Client" />
-                    </children>
-                  </VBox>
-                     </children>
-                  </HBox>
+            <VBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                        <Button fx:id="showProjectBT" mnemonicParsing="false" onAction="#showProjectInfo" prefHeight="20.0" prefWidth="20.0" text="&gt;" />
+                <Label alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Project" textAlignment="CENTER" wrapText="false">
+                  <font>
+                    <Font size="18.0" fx:id="x1" />
+                  </font>
+                  <textFill>
+                    <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
+                  </textFill>
+                </Label>
+                <Label text="Vessel" />
+                <Label text="Client" />
+              </children>
+            </VBox>
           </children>
         </AnchorPane>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="-1.0" prefWidth="-1.0">
@@ -94,6 +90,14 @@
                       <graphic>
                         <ImageView>
                           <Image url="@image/baloon.png" />
+                        </ImageView>
+                      </graphic>
+                    </Tab>
+                    <Tab fx:id="TensionPane" text="Tension">
+                      <fx:include fx:id="tension" source="tension/tensionUI.fxml" />
+                      <graphic>
+                        <ImageView>
+                          <Image url="@image/line_chart.png" />
                         </ImageView>
                       </graphic>
                     </Tab>
@@ -263,22 +267,18 @@
             </AnchorPane>
           </content>
         </ScrollPane>
-        <AnchorPane fx:id="spreadView" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0">
+        <AnchorPane fx:id="spreadView" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="200.0">
           <children>
-                  <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#showSpreadView" prefHeight="532.0" prefWidth="40.0" text="&lt;" HBox.hgrow="ALWAYS" />
-                  <VBox>
-                    <children>
-                      <Canvas fx:id="spread" height="536.0" width="200.0" VBox.vgrow="ALWAYS">
-                        <cursor>
-                          <Cursor fx:constant="CROSSHAIR" />
-                        </cursor>
-                      </Canvas>
-                    </children>
-                  </VBox>
-                     </children>
-                  </HBox>
+            <VBox>
+              <children>
+                        <Button fx:id="showSpreadBT" mnemonicParsing="false" onAction="#showSpreadView" prefHeight="20.0" prefWidth="20.0" text="&lt;" />
+                <Canvas fx:id="spread" height="536.0" width="200.0" VBox.vgrow="ALWAYS">
+                  <cursor>
+                    <Cursor fx:constant="CROSSHAIR" />
+                  </cursor>
+                </Canvas>
+              </children>
+            </VBox>
           </children>
         </AnchorPane>
       </items>

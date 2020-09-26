@@ -64,228 +64,218 @@ public class ballasting_Controller {
     public void initialize() {
         BallTable.setRoot(root);
 
-        // Value factory.
-        SpinnerValueFactory<Double> valueminWAFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-4, 15, -15, 0.1);
-        minWA.setValueFactory(valueminWAFactory);
-        // Value factory.
-        SpinnerValueFactory<Double> valuemaxWAFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(4, 15, -15, 0.1);
-        maxWA.setValueFactory(valuemaxWAFactory);
-        // Value factory.
-        SpinnerValueFactory<Integer> valueskipHeadFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 40, 0, 1);
-        skipHead.setValueFactory(valueskipHeadFactory);
-        // Value factory.
-        SpinnerValueFactory<Integer> valueskipTailFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 40, 0, 1);
-        skipTail.setValueFactory(valueskipTailFactory);
-
-        ballColumnSeq1.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                //by using Number we don't have to parse a String
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq2.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                //by using Number we don't have to parse a String
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq3.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                //by using Number we don't have to parse a String
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq4.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq5.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq6.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                //by using Number we don't have to parse a String
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq7.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq8.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                //by using Number we don't have to parse a String
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq9.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                //by using Number we don't have to parse a String
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
-        ballColumnSeq10.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
-            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
-                @Override
-                protected void updateItem(Number item, boolean empty) {
-                    super.updateItem(item, empty);
-                    TreeTableRow<SeqData> seq = getTreeTableRow();
-                    if (item == null || empty){
-                        setText(null);
-                        seq.setStyle("");
-                        setStyle("");
-                    } else {
-                        setText(item.toString());
-                        setStyle(item.doubleValue() < 5.0
-                                ? ""
-                                : "-fx-text-fill:#FF6633");
-                    }
-                }
-            };
-            return cell;
-        });
+////        ballColumnSeq1.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+////            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+////                @Override
+////                //by using Number we don't have to parse a String
+////                protected void updateItem(Number item, boolean empty) {
+////                    super.updateItem(item, empty);
+////                    TreeTableRow<SeqData> seq = getTreeTableRow();
+////                    if (item == null || empty){
+////                        setText(null);
+////                        seq.setStyle("");
+////                        setStyle("");
+////                    } else {
+////                        setText(item.toString());
+////                        setStyle(item.doubleValue() < 5.0
+////                                ? ""
+////                                : "-fx-text-fill:#FF6633");
+////                    }
+////                }
+////            };
+////            return cell;
+////        });
+//        ballColumnSeq2.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                //by using Number we don't have to parse a String
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq3.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                //by using Number we don't have to parse a String
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq4.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq5.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq6.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                //by using Number we don't have to parse a String
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq7.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq8.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                //by using Number we don't have to parse a String
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq9.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                //by using Number we don't have to parse a String
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
+//        ballColumnSeq10.setCellFactory((TreeTableColumn<SeqData, Number> param) -> {
+//            TreeTableCell<SeqData, Number> cell = new TreeTableCell<>(){
+//                @Override
+//                protected void updateItem(Number item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    TreeTableRow<SeqData> seq = getTreeTableRow();
+//                    if (item == null || empty){
+//                        setText(null);
+//                        seq.setStyle("");
+//                        setStyle("");
+//                    } else {
+//                        setText(item.toString());
+//                        setStyle(item.doubleValue() < 5.0
+//                                ? ""
+//                                : "-fx-text-fill:#FF6633");
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
 
         // table select listener
         BallTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> drawChGraph(newValue.getValue()));
+
+        minWA.valueProperty().addListener(event -> update());
+        maxWA.valueProperty().addListener(event -> update());
     }
 
     public void drawChGraph(SeqData unit) {
@@ -463,48 +453,53 @@ public class ballasting_Controller {
         }
     }
 
-    @FXML public void update(ActionEvent actionEvent){
-        logger.warn("errorButton pressed");
+    @FXML public void update(){
         List<SeqData> resErrorsOnly = new ArrayList<>();
         if(errorsButton.isSelected()){
+            minWA.setDisable(false);
+            maxWA.setDisable(false);
+            skipHead.setDisable(false);
+            skipTail.setDisable(false);
             //filter tenSeq
-            logger.warn("errors is active");
             List<SeqData> filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq1_mean() < -3 || c.getSeq1_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq1_mean() < minWA.getValue() || c.getSeq1_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq2_mean() < -3 || c.getSeq2_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq2_mean() < minWA.getValue() || c.getSeq2_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq3_mean() < -3 || c.getSeq3_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq3_mean() < minWA.getValue() || c.getSeq3_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq4_mean() < -3 || c.getSeq4_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq4_mean() < minWA.getValue() || c.getSeq4_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq5_mean() < -3 || c.getSeq5_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq5_mean() < minWA.getValue() || c.getSeq5_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq6_mean() < -3 || c.getSeq6_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq6_mean() < minWA.getValue() || c.getSeq6_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq7_mean() < -3 || c.getSeq7_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq7_mean() < minWA.getValue() || c.getSeq7_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq8_mean() < -3 || c.getSeq8_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq8_mean() < minWA.getValue() || c.getSeq8_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq9_mean() < -3 || c.getSeq9_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq9_mean() < minWA.getValue() || c.getSeq9_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
             filteredData = tenSeq.stream()
-                    .filter(c -> (c.getSeq10_mean() < -3 || c.getSeq10_mean() > 3)).collect(Collectors.toList());
+                    .filter(c -> (c.getSeq10_mean() < minWA.getValue() || c.getSeq10_mean() > maxWA.getValue())).collect(Collectors.toList());
             resErrorsOnly.addAll(filteredData);
 
             Collections.sort(resErrorsOnly, new Sortbystr());
             //fill table
             fillTable(resErrorsOnly);
         } else {
-            logger.warn("errors is NOT active");
+            minWA.setDisable(true);
+            maxWA.setDisable(true);
+            skipHead.setDisable(true);
+            skipTail.setDisable(true);
             fillTable(tenSeq);
         }
     }

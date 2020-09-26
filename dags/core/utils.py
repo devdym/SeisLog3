@@ -35,7 +35,7 @@ def check_project_id(project, vessel):
                                    pw="usersql",
                                    db="aurora_light"))
 
-    result = engine.execute('SELECT id FROM Projects WHERE projectName = %s and vessel = %s', (project, vessel))
+    result = engine.execute('SELECT id FROM projects WHERE projectName = %s and vessel = %s', (project, vessel))
     for r in result:
 
         res = r[0]
@@ -55,7 +55,7 @@ def save_project_name_toMySql(project, vessel):
 						   .format(user="usersql",
 							pw="usersql",
 							db="aurora_light"))
-	engine.execute('INSERT INTO Projects(projectName, vessel) VALUES (%s, %s)', (project, vessel))
+	engine.execute('INSERT INTO projects(projectName, vessel) VALUES (%s, %s)', (project, vessel))
 
 def check_log_id(file_path, project_id):
     res = None

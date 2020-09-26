@@ -13,6 +13,7 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+<!--        <property name="connection.url">jdbc:mysql://localhost/aurora_light</property>-->
         <property name="connection.url">jdbc:mysql://10.103.1.30/aurora_light</property>
         <property name="connection.username">usersql</property>
         <property name="connection.password">usersql</property>
@@ -36,5 +37,6 @@
         <mapping class="main.entities.Batteries" />
         <mapping class="main.entities.Ballasting" />
         <mapping class="main.entities.ImportLog" />
+        <mapping class="main.entities.Tension" />
     </session-factory>
 </hibernate-configuration>

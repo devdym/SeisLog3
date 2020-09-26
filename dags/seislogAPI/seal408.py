@@ -3,39 +3,44 @@ import re
 import csv
 import sqlalchemy
 from sqlalchemy import create_engine
+from datetime import datetime
+import os
 
 
-def read_tension(file):
-	'''reads the csv file exported by Seal 408 with Streamer tension data'''
-	d = ''
-	s = 0
+def read_tension408(file):
+	cntt = 0;
+	data = []
+	file_year = datetime.fromtimestamp(os.path.getctime(file)).strftime('%Y')
+	with open(file, 'r', encoding='cp1252') as file1:
+	    line = file1.readline()
+	    while line:
+	        if cntt > 18:
+	            tmp = line.strip().split(' ')
+	            while('' in tmp) :
+	                tmp.remove('')
+	            data.append(tmp)
+	            cntt += 1
+	        cntt += 1
+	        line = file1.readline()
 
-	with open(file) as csv_file:
-		csv_reader = csv.reader(csv_file, delimiter=':')
-		line_count = 0
-		for row in csv_reader:
-			if line_count == 0:
-				d = row[1].strip()
-			if line_count == 1:
-				s = int(row[1].strip())
-			if line_count >= 2:
-				break
-			line_count += 1
+	df = pd.DataFrame(data)
+	df =df.rename(columns={0:'streamer', 3:'tension', 5:'date_'})
+	df['streamer'] = df['streamer'].str[1:].astype('int') # get str number
+	df['tension'] = df['tension'].str[:-2].astype(int) # cut decimal 0
+	df = df.drop(1, 1)
+	df = df.drop(2, 1)
+	df = df.drop(4, 1)
+	df['date_'] = df['date_'].str[:3] # get julian day only
+	df['date_'] = df['date_'] + file_year # add file creation year
+	df['date_'] = pd.to_datetime(pd.Series(df['date_']), format="%j%Y") # parse to date
 
-	data = pd.read_csv(file, sep='\t', skiprows=2)
-	data.rename(columns={'    Time': 'time',
-						 'Tension (daN)': 'tension',
-						 'Head Buoy Power': 'hpower',
-						 'Head Buoy Current (mA)': 'hcurrent',
-						 'Output Voltage (V)': 'voltage'}, inplace=True)
+	m = df.groupby('streamer').tension.mean() # calc mean tension
 
-	data['date_'] = d
-	data['str'] = s
-	data['date_'] = data['date_'] + ' ' + data['time']
-	data['date_'] = data['date_'].astype('datetime64[ns]')
-	data = data.drop('time', 1)
+	res = pd.DataFrame(m)
+	res['date_'] = df['date_'][1] # add dat column
+	res.reset_index(inplace=True)
 
-	return data
+	return res
 
 
 def read_instest(file):
@@ -142,6 +147,7 @@ def read_instest2(file):
 	df['failure'] = ''
 
 	return df
+
 
 def read_instestlimits2(file, date):
 	'''

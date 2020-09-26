@@ -1,4 +1,4 @@
-from seislogAPI.seal408 import read_instest2, read_instestlimits2
+from seislogAPI.seal408 import read_tension408
 from seislogAPI.folderscaner import scan_folder, logFiles_toMySql
 import os, shutil
 import logging
@@ -13,7 +13,7 @@ basepath = Path('/home/user/data_repository/projects/')
 def scan(**kwargs):
     files = scan_folder(basepath)
     # filter instest logs
-    files = dict(filter(lambda elem: "instest" in elem[0], files.items()))
+    files = dict(filter(lambda elem: "tension" in elem[0], files.items()))
     kwargs['ti'].xcom_push(key='import_files', value=files)
 
 
@@ -56,15 +56,10 @@ def read_data(**kwargs):
             logger.info('importLog id {}'.format(importlog_id))
         else:
             logger.info('importLog file dosn`t exist')
-            # import file into insTestRes table
-            b = read_instest2(log_path)
-            instest_toMySql(b, projectid)
-            logger.info('IMPORTED RES')
-            # import file into insTestLimits table
-            lim_date = b['updated'][0]
-            lim = read_instestlimits2(log_path, lim_date)
-            instestlimits_toMySql(lim, projectid)
-            logger.info('IMPORTED LIMITS')
+            # import file into ballasting table
+            b = read_tension408(log_path)
+            tension_toMySql(b, projectid)
+            logger.info('IMPORTED')
             # add into importLog
             save_log_toMySql(log_path, projectid)
             logger.info('LOG is UPDATED')
@@ -79,21 +74,11 @@ def move(**kwargs):
         shutil.move(s, d)
 
 
-def instest_toMySql(data, id):
+def tension_toMySql(data, id):
     data['project_id'] = id
     # create sqlalchemy engine
     engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
 						   .format(user="usersql",
 								   pw="usersql",
 								   db="aurora_light"))
-    data.to_sql('insTestRes', con=engine, if_exists='append', chunksize=1000, index=False)
-
-
-def instestlimits_toMySql(data, id):
-    data['project_id'] = id
-    # create sqlalchemy engine
-    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
-						   .format(user="usersql",
-								   pw="usersql",
-								   db="aurora_light"))
-    data.to_sql('insTestLimits', con=engine, if_exists='append', chunksize=1000, index=False)
+    data.to_sql('tension', con=engine, if_exists='append', chunksize=1000, index=False)

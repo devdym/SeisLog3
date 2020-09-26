@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.tension.tension_Controller">
+   <children>
+      <SplitPane dividerPositions="0.5267558528428093" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <HBox layoutX="57.0" layoutY="56.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox prefWidth="100.0" spacing="10.0" HBox.hgrow="NEVER">
+                           <children>
+                              <ToggleButton fx:id="weekTButton" mnemonicParsing="false" prefWidth="100.0" selected="true" text="Week">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="time" />
+                                 </toggleGroup>
+                              </ToggleButton>
+                              <ToggleButton fx:id="monthTButton" mnemonicParsing="false" prefWidth="100.0" text="Month" toggleGroup="$time" />
+                              <ToggleButton fx:id="projectTButton" mnemonicParsing="false" prefWidth="100.0" text="Project" toggleGroup="$time" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                        <TableView fx:id="TensionTableRes" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Date">
+                              <cellValueFactory>
+                                <PropertyValueFactory property="date_" />
+                              </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="75.0" text="Str 1">
+                              <cellValueFactory>
+                                <PropertyValueFactory property="str1" />
+                              </cellValueFactory>
+                            </TableColumn>
+                              <TableColumn prefWidth="75.0" text="Str2">
+                                <cellValueFactory>
+                                  <PropertyValueFactory property="str2" />
+                                </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="75.0" text="Str3">
+                                <cellValueFactory>
+                                  <PropertyValueFactory property="str3" />
+                                </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="75.0" text="Str4">
+                                <cellValueFactory>
+                                  <PropertyValueFactory property="str4" />
+                                </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="75.0" text="Str5">
+                                <cellValueFactory>
+                                  <PropertyValueFactory property="str5" />
+                                </cellValueFactory>
+                              </TableColumn>
+                              <TableColumn prefWidth="75.0" text="Str6">
+                                <cellValueFactory>
+                                  <PropertyValueFactory property="str6" />
+                                </cellValueFactory>
+                              </TableColumn>
+                          </columns>
+                        </TableView>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <LineChart fx:id="LineChart" createSymbols="false" layoutX="-63.0" layoutY="-48.0" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

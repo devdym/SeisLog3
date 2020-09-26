@@ -27,13 +27,21 @@
                                     <Insets top="20.0" />
                                  </padding>
                               </Label>
-                              <Spinner fx:id="minBankA" prefWidth="100.0" />
+                              <Spinner fx:id="minBankA" prefWidth="100.0">
+                                <valueFactory>
+                                  <SpinnerValueFactory.DoubleSpinnerValueFactory amountToStepBy="0.1" initialValue="4" max="7" min="0" />
+                                </valueFactory>
+                              </Spinner>
                               <Label prefWidth="100.0" text="Min V Bank B">
                                  <padding>
                                     <Insets top="20.0" />
                                  </padding>
                               </Label>
-                              <Spinner fx:id="minBankB" prefWidth="100.0" />
+                              <Spinner fx:id="minBankB" prefWidth="100.0">
+                                <valueFactory>
+                                  <SpinnerValueFactory.DoubleSpinnerValueFactory amountToStepBy="0.1" initialValue="4" max="7" min="0" />
+                                </valueFactory>
+                              </Spinner>
                            </children>
                            <HBox.margin>
                               <Insets />
@@ -83,7 +91,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <LineChart fx:id="BatteriesGraph" animated="false" createSymbols="false" legendSide="LEFT" prefHeight="179.0" prefWidth="495.0" title="DigiBird Battery Voltage" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <LineChart fx:id="BatteriesGraph" animated="false" createSymbols="false" legendSide="LEFT" prefHeight="179.0" prefWidth="495.0" title="DigiBird Battery Voltage" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <xAxis>
                       <CategoryAxis label="Date" side="BOTTOM" fx:id="xAxisDate" />
                     </xAxis>

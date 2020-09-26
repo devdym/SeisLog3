@@ -3,7 +3,6 @@ package main.insTest;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -30,12 +29,10 @@ public class insTest_Controller {
     @FXML public Spinner<Integer> dS3;
     @FXML public Spinner<Integer> dS4;
     @FXML public Spinner<Integer> dS5;
-    @FXML public Spinner<Integer> dS6;
     @FXML public Spinner<Integer> tS2;
     @FXML public Spinner<Integer> tS3;
     @FXML public Spinner<Integer> tS4;
     @FXML public Spinner<Integer> tS5;
-    @FXML public Spinner<Integer> tS6;
     @FXML public TextField lkgTF;
     @FXML public TextField noiseTF;
     @FXML public TextField capTolTF;
@@ -94,7 +91,6 @@ public class insTest_Controller {
         // Date Picker on Action
         InsTestDateDatePicker.setOnAction(event -> update(InsTestDateDatePicker.getValue()));
         //Errors only button
-        errorsButton.setSelected(true);
         errorsButton.setOnAction(event -> update(InsTestDateDatePicker.getValue()));
 
         //Result Table
@@ -320,9 +316,6 @@ public class insTest_Controller {
             return cell;
         });
 
-        // Value factory.
-        SpinnerValueFactory<Integer> valueAFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 6, 1, 1);
-        StrSP.setValueFactory(valueAFactory);
         StrSP.valueProperty().addListener(event -> updateGraph(InsTestDateDatePicker.getValue()));
 
         tS2.valueProperty().addListener((observable) -> limitsFunc());
@@ -608,25 +601,6 @@ public class insTest_Controller {
         for (int i = 2; i <= 6; i++) {
             calcInfoArea.appendText("Noise S" + i + "\t" + noiseTF.getText() + "\n");
         }
-
-//        //--------
-//        s = 2;
-//        for (Integer i : te) {
-//            double temp = i;
-//            double pressure = pr.get(te.indexOf(i));
-//            capTol = Double.parseDouble(capTolTF.getText());
-//            CutoffTol = Double.parseDouble(cutTolTF.getText());
-//            pressure = pressure / 10;
-//            cap = 260.0 + 1.742 * (temp - 20) - 9.230 * pressure;
-//            cutoff = 1 / (0.4741 + 0.00277 * (temp - 20) - 0.0147 * pressure);
-//
-//            minCap = cap - (cap * capTol / 100);
-//            maxCap = cap + (cap * capTol / 100);
-//
-//            minCutoff = cutoff - (cutoff * CutoffTol / 100);
-//            maxCutoff = cutoff + (cutoff * CutoffTol / 100);
-//            s++;
-//        }
     }
 
     @FXML public void ShowCap() {
@@ -727,18 +701,18 @@ public class insTest_Controller {
             XYChart.Series<String, Number> Series10 = new XYChart.Series<>();
             XYChart.Series<String, Number> Series11 = new XYChart.Series<>();
             XYChart.Series<String, Number> Series12 = new XYChart.Series<>();
-            Series1.setName("trace 1");
-            Series2.setName("trace 2");
-            Series3.setName("trace 3");
-            Series4.setName("trace 4");
-            Series5.setName("trace 5");
-            Series6.setName("trace 6");
-            Series7.setName("trace 7");
-            Series8.setName("trace 8");
-            Series9.setName("trace 9");
-            Series10.setName("trace 10");
-            Series11.setName("trace 11");
-            Series12.setName("trace 12");
+            Series1.setName("Trace 1");
+            Series2.setName("Trace 2");
+            Series3.setName("Trace 3");
+            Series4.setName("Trace 4");
+            Series5.setName("Trace 5");
+            Series6.setName("Trace 6");
+            Series7.setName("Trace 7");
+            Series8.setName("Trace 8");
+            Series9.setName("Trace 9");
+            Series10.setName("Trace 10");
+            Series11.setName("Trace 11");
+            Series12.setName("Trace 12");
 
             for (InsTestRes instestres : sp) {
                 if(instestres.getTrace() == dTrace.get(0)){
@@ -787,6 +761,4 @@ public class insTest_Controller {
             SpreadLC.getData().addAll(series);
         });
     }
-
-
 }

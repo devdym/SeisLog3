@@ -37,14 +37,6 @@ public class battery_Controller {
         ResultTable.setRoot(root);
 
         errorsButton.setSelected(true);
-        // Value factory.
-        SpinnerValueFactory<Double> valueAFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(4.2, 6.2, 3, 0.1);
-        minBankA.setValueFactory(valueAFactory);
-
-        // Value factory.
-        SpinnerValueFactory<Double> valueBFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(4.2, 6.2, 3, 0.1);
-        minBankB.setValueFactory(valueBFactory);
-
         //query dates from DB for DatePicker
         Runnable readBatteriesDates = () -> {
             BattDates = ReadData.readBattDate();
